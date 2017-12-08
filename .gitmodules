@@ -1,3 +1,9 @@
 [submodule "hardware/library"]
 	path = hardware/main/library
 	url = git@github.com:sevun/library-altium.git
+[submodule "hardware/temp/library"]
+	path = hardware/temp/library
+	url = git@github.com:sevun/library-altium.git
+[submodule "hardware/light_humid/library"]
+	path = hardware/light_humid/library
+	url = git@github.com:sevun/library-altium.git
