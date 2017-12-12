@@ -362,7 +362,7 @@ GenerateClassCluster=0
 DocumentUniqueId=
 
 [Document20]
-DocumentPath=library\Texas_Instruments\texas_instruments.IntLib
+DocumentPath=library\Sullins\sullins.IntLib
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
@@ -379,6 +379,23 @@ GenerateClassCluster=0
 DocumentUniqueId=
 
 [Document21]
+DocumentPath=library\Texas_Instruments\texas_instruments.IntLib
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=
+
+[Document22]
 DocumentPath=_power.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=200
@@ -395,7 +412,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=TUTRAWXX
 
-[Document22]
+[Document23]
 DocumentPath=_accel_mag.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=310
@@ -412,7 +429,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=RMRBAWYJ
 
-[Document23]
+[Document24]
 DocumentPath=_gyroscope.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=320
@@ -429,7 +446,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=OUBERJTG
 
-[Document24]
+[Document25]
 DocumentPath=7797-20-0224.PcbDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -446,7 +463,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=SBVWXDGR
 
-[Document25]
+[Document26]
 DocumentPath=_i2c0.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=300
@@ -463,7 +480,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=AOHYCXMH
 
-[Document26]
+[Document27]
 DocumentPath=_i2c1.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=400
@@ -480,7 +497,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=WCYFRQIH
 
-[Document27]
+[Document28]
 DocumentPath=_io.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=500
@@ -497,7 +514,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=QKXMCTDM
 
-[Document28]
+[Document29]
 DocumentPath=_spi0.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=610
@@ -514,7 +531,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=QLSRKBCU
 
-[Document29]
+[Document30]
 DocumentPath=_microsd.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=600
@@ -530,18 +547,6 @@ ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=DPHWGDKL
-
-[GeneratedDocument1]
-DocumentPath=7797-20-0224 12-8-2017 10-19-19 AM.WAS
-DItemRevisionGUID=
-
-[GeneratedDocument2]
-DocumentPath=7797-20-0224 12-8-2017 10-19-34 AM.WAS
-DItemRevisionGUID=
-
-[GeneratedDocument3]
-DocumentPath=7797-20-0224 12-8-2017 10-21-03 AM.WAS
-DItemRevisionGUID=
 
 [Configuration1]
 Name=Sources
@@ -1422,7 +1427,6 @@ Type110=1
 Type111=1
 Type112=1
 Type113=1
-MultiChannelAlternate=2
 
 [ERC Connection Matrix]
 L1=NNNNNNNNNNNWNNNWW
