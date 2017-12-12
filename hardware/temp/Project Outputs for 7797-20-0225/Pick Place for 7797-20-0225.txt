@@ -1,0 +1,18 @@
+Altium Designer Pick and Place Locations
+C:\Users\brandon.dixon\Git\hubert\hardware\temp\Project Outputs for 7797-20-0225\Pick Place for 7797-20-0225.txt
+
+========================================================================================================================
+File Design Information:
+
+Date:       11/12/17
+Time:       20:57
+Revision:   Not in VersionControl
+Variant:    No variations
+Units used: mil
+
+Designator Comment            Layer    Footprint      Center-X(mil) Center-Y(mil) Rotation Description                                                                                                                                                             
+C1         GRM155R71C103KA01D TopLayer 0402           245.000       79.685        90       "Cap, 0.01 µF, 16 V, X7R"                                                                                                                                               
+R2         CRCW040210K0FKED   TopLayer 0402           40.000        225.000       270      "0.125W, -55-155C, 1005, 50V, ±1%"                                                                                                                                      
+R1         CRCW040210K0FKED   TopLayer 0402           245.000       180.000       90       "0.125W, -55-155C, 1005, 50V, ±1%"                                                                                                                                      
+U1         TMP102AIDRLT       TopLayer DRL0006A_L     120.000       220.000       180      "Low Power Digital Temperature Sensor with SMBus and Two-Wire Serial Interface, 1.4 to 3.6 V, -40 to 125 degC, 6-Pin SOT (DRL), Green (RoHS & no Sb/Br), Tape and Reel" 
+J1         GRPB032VWVN-RC     TopLayer GRPB032VWVN-RC 110.000       85.000        0        "2x3 Header, 0.05" spacing"                                                                                                                                             
