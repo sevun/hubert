@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------------------
-Gerber File Extension Report For: 7797-20-0225.GBR   12/11/2017  8:56:36 PM
+Gerber File Extension Report For: 7797-20-0225.GBR   2018-01-06  9:45:27 PM
 ------------------------------------------------------------------------------------------
 
 
@@ -7,8 +7,6 @@ Gerber File Extension Report For: 7797-20-0225.GBR   12/11/2017  8:56:36 PM
 Layer Extension     Layer Description                      
 ------------------------------------------------------------------------------------------
 .GTL                Top Layer                               
-.GP1                GND                                     
-.GP2                PWR                                     
 .GBL                Bottom Layer                            
 .GPB                Bottom Pad Master                       
 .GPT                Top Pad Master                          
