@@ -10,7 +10,7 @@ Comment,Description,Designator,Footprint,LibRef,Quantity,Value
 "GRM1555C1H240GA01D","Capacitor (Semiconductor SIM Model)","C19, C20","0402","Cap Semi","2","24p"
 "GRM188R71A105KA61J","-55-125C, 1608, 10V, X7R, ±10%","C21, C25, C31","0603","GRM188R71AxxxKdddd","3","1u"
 "GRM188R71A225KE15D","-55-125C, 1608, 10V, X7R, ±10%","C29","0603","GRM188R71AxxxKdddd","1","2.2u"
-"GRM022R71A102KA12L","-55-125C, 1005, 10V, X7R, ±10%","C35","0402","GRM022R71AxxxKdddd","1","1000p"
+"GRM155R71H102KA01J","-55-125C, 1005, 50V, X7R, ±10%","C35","0402","GRM155R71HxxxKdddd","1","1000p"
 "LTST-C171GKT","LED","IND1","0805","LTST-C171GKT","1",""
 "LTST-C171KSKT","LED","IND2","0805","LTST-C171KSKT","1",""
 "47346-0001","Micro-USB B Receptacle with Flange, -30 to 85 degC, 5-Pin SMD, RoHS, Tape and Reel","J1","MOLX-47346-0001-5_V","CMP-2000-05246-1","1",""
