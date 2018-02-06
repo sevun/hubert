@@ -19,7 +19,7 @@ Comment,Description,Designator,Footprint,LibRef,Quantity,Value
 "Header 3","Header, 3-Pin","J4","HDR1X3","Header 3","1",""
 "GRPB032VWVN-RC","2x3 Header, 0.05" spacing","J5, J6, J7","GRPB032VWVN-RC","GRPB032VWVN-RC","3",""
 "MPZ1608S331A","EMI Filter Beads, Chips & Arrays 0603 330ohms 100MHz Rdc 0.08ohms 1.7A","L1","1608[0603]","Inductor","1","330 ohms"
-"IRLML6401","MOSFET P-CH 12V 4.3A SOT-23","Q1","Micro3_N","IRLML6401","1",""
+"IRLML6401 (Alternate DMP1045U-7)","MOSFET P-CH 12V 4.3A SOT-23","Q1","Micro3_N","IRLML6401","1",""
 "CRCW04021M00FKEDHP","0.125W, -55-155C, 1005, 50V, ±1%","R1, R8","0402","CRCW0402xxxxFKED","2","1M"
 "CRCW040210K0FKEDHP","0.125W, -55-155C, 1005, 50V, ±1%","R2, R33","0402","CRCW0402xxxxFKED","2","10k"
 "CRCW040233R0FKED","0.125W, -55-155C, 1005, 50V, ±1%","R3, R4","0402","CRCW0402xxxxFKED","2","33"
