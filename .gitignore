@@ -13,3 +13,10 @@ __Previews
 History
 Design\ Rule*.*
 hardware/Project\ Logs*
+
+# Eclipse
+.settings
+.launches
+Debug
+targetConfigs
+
