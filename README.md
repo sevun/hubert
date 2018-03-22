@@ -13,3 +13,4 @@ They are tailored to match the Hubert hardware.
 1. **GPIO Write** - This just turns on the IND1 and IND2 lights.  These LEDs are there for general use.
 2. **Blinky** - Sets the IND1 and IND2 lights to blink in an alternating pattern using a delay.
 3. **GPIO Read** - Uses the SW1 to turn on the IND2.
+4. **UART Echo** - Reads character on UART0 Rx and echoes it to UART0 Tx
