@@ -1,6 +1,6 @@
 /******************************************************************
  * Hubert Data Logger
- * GPIO Example
+ * GPIO Write Example
  * Developed by Sevun Scientific, Inc.
  * http://sevunscientific.com
  * *****************************************************************
