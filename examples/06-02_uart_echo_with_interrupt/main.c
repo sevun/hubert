@@ -88,7 +88,7 @@ int main(void)
 
     while (1)
     {
-        // Timer 0
+        // UART 0
         if ( 1 == g_bKeyboardInputFlag )
         {
             g_bKeyboardInputFlag = 0;  // Clear the flag for keyboard input interrupt

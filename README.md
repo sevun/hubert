@@ -20,5 +20,5 @@ They are tailored to match the Hubert hardware.
 6. **UART**
 	1. **UART Echo with Polling** - Reads character using polling on UART0 Rx and echoes it to UART0 Tx
 	2. **UART Echo with Interrupts** - Reads character using interrupt on UART0 Rx and echoes it to UART0 Tx
-	3. **UART User Interface** - Setup a display to see data on the UART and a menu system
-7. **Hibernate** - Use the hibernate module to sleep between blinking IND1.
+7. **User Interface** - Uses slow timer for formatting, fast timer for data, and display over UART
+0. **Hibernate** - Use the hibernate module to sleep between blinking IND1.
