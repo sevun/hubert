@@ -1,6 +1,6 @@
 /******************************************************************
  * Hubert Data Logger
- * Timer Example
+ * One Timer Example
  * Developed by Sevun Scientific, Inc.
  * http://sevunscientific.com
  * *****************************************************************

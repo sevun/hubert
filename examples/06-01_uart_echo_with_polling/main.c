@@ -1,6 +1,6 @@
 /******************************************************************
  * Hubert Data Logger
- * UART0 Echo Example
+ * UART0 Echo with Polling Example
  * Developed by Sevun Scientific, Inc.
  * http://sevunscientific.com
  * *****************************************************************
