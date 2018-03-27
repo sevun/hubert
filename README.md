@@ -15,7 +15,7 @@ They are tailored to match the Hubert hardware.
 3. **GPIO Read** - Uses the SW1 to turn on the IND2.
 4. **UART Echo** - Reads character on UART0 Rx and echoes it to UART0 Tx
 5. **Timers**
-    5.1 **One Timer** - A repeating timer which blinks a light on IND1
-    5.2 **Two Timer** - A repeating timer which blinks a light on IND1 slow and IND2 fast
+	1. **One Timer** - A repeating timer which blinks a light on IND1
+	2. **Two Timer** - A repeating timer which blinks a light on IND1 slow and IND2 fast
 6. **UART User Interface** - Setup a display to see data on the UART and a menu system.
 7. **Hibernate** - Use the hibernate module to sleep between blinking IND1.
