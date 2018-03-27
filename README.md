@@ -18,7 +18,7 @@ They are tailored to match the Hubert hardware.
 	1. **One Timer** - A repeating timer which blinks a light on IND1
 	2. **Two Timer** - A repeating timer which blinks a light on IND1 slow and IND2 fast
 6. **UART**
-	1. **UART Echo with Polling** - Reads character using polling (continously checking) on UART0 Rx and echoes it to UART0 Tx
+	1. **UART Echo with Polling** - Reads character using polling on UART0 Rx and echoes it to UART0 Tx
 	2. **UART Echo with Interrupts** - Reads character using interrupt on UART0 Rx and echoes it to UART0 Tx
 	3. **UART User Interface** - Setup a display to see data on the UART and a menu system
 7. **Hibernate** - Use the hibernate module to sleep between blinking IND1.
