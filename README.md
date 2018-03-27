@@ -14,3 +14,6 @@ They are tailored to match the Hubert hardware.
 2. **Blinky** - Sets the IND1 and IND2 lights to blink in an alternating pattern using a delay.
 3. **GPIO Read** - Uses the SW1 to turn on the IND2.
 4. **UART Echo** - Reads character on UART0 Rx and echoes it to UART0 Tx
+5. **Timer** - A repeating timer which blinks a light on IND1
+6. **UART User Interface** - Setup a display to see data on the UART and a menu system.
+7. **Hibernate** - Use the hibernate module to sleep between blinking IND1.
