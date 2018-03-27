@@ -22,14 +22,17 @@
 #include <stdbool.h>
 #include "inc/hw_memmap.h"
 #include "inc/hw_ints.h"
+#include "driverlib/gpio.h"
 #include "driverlib/interrupt.h"
 #include "driverlib/pin_map.h"
 #include "driverlib/sysctl.h"
 #include "driverlib/timer.h"
-#include "driverlib/gpio.h"
 #include "driverlib/uart.h"
+#include "utils/uartstdio.h"
 
 #define UART_SPEED 115200
+
+uint8_t ui8Page;
 
 //*****************************************************************************
 // Timers Interrupt Function
@@ -125,8 +128,9 @@ int main(void)
     //*****************************************************************************
     // UART Setup
     //*****************************************************************************
-    UARTConfigSetExpClk(UART0_BASE, SysCtlClockGet(), UART_SPEED,
-        (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE | UART_CONFIG_PAR_NONE));
+
+    // Initialize the UART0 using uartstdio
+    UARTStdioConfig(0, UART_SPEED, SysCtlClockGet());
 
     //*****************************************************************************
     // Configure Interrupts
@@ -151,11 +155,30 @@ int main(void)
 
             while( UARTCharsAvail(UART0_BASE) ) //loop while there are chars
             {
-                UARTCharPutNonBlocking(UART0_BASE, UARTCharGetNonBlocking(UART0_BASE)); //echo character
+                char bleh = UARTCharGetNonBlocking(UART0_BASE);
+
+                switch ( bleh )
+                {
+                    case '0':
+                        ui8Page = 0;
+                        // Generate screen info here
+                        break;
+                    case '1':
+                        ui8Page = 1;
+                        // Generate screen info here
+                        break;
+                    case '2':
+                        ui8Page = 2;
+                        // Generate screen info here
+                        break;
+                    default:
+                        // Generate screen info here
+                        break;
+                }
             }
         }
 
-        // Timer 0
+        // Timer x0
         if ( 1 == g_bTimer0Flag )
         {
             g_bTimer0Flag = 0;  // Clear the flag for Timer 0 interrupt
@@ -172,6 +195,41 @@ int main(void)
                 GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, GPIO_PIN_4);  // IND1 LED On
             }
 
+            switch ( ui8Page )
+            {
+                case 0:
+                    UARTprintf("\033[?25l");
+                    UARTprintf("\033[2J\033[;H");
+                    UARTprintf("(c) Sevun Scientific, Inc.");
+                    UARTprintf("\r\nPower Brick Armor Panel Controller");
+
+                    UARTprintf("\033[8;1H");
+                    UARTprintf("\r\n    _____/\\\\\\\\\\\\\\\\\\\\\\_______/\\\\\\\\\\\\\\\\\\\\\\____/\\\\\\\\\\\\\\\\\\\\\\_        ");
+                    UARTprintf("\r\n     ___/\\\\\\/////////\\\\\\___/\\\\\\/////////\\\\\\_\\/////\\\\\\///__       ");
+                    UARTprintf("\r\n      __\\//\\\\\\______\\///___\\//\\\\\\______\\///______\\/\\\\\\_____      ");
+                    UARTprintf("\r\n       ___\\////\\\\\\___________\\////\\\\\\_____________\\/\\\\\\_____     ");
+                    UARTprintf("\r\n        ______\\////\\\\\\___________\\////\\\\\\__________\\/\\\\\\_____    ");
+                    UARTprintf("\r\n         _________\\////\\\\\\___________\\////\\\\\\_______\\/\\\\\\_____   ");
+                    UARTprintf("\r\n          __/\\\\\\______\\//\\\\\\___/\\\\\\______\\//\\\\\\______\\/\\\\\\_____  ");
+                    UARTprintf("\r\n           _\\///\\\\\\\\\\\\\\\\\\\\\\/___\\///\\\\\\\\\\\\\\\\\\\\\\/____/\\\\\\\\\\\\\\\\\\\\\\_ ");
+                    UARTprintf("\r\n            ___\\///////////_______\\///////////_____\\///////////__");
+                    break;
+                case 1:
+                    UARTprintf("\033[?25l");
+                    UARTprintf("\033[2J\033[;H");
+                    UARTprintf("Screen 1");
+                    // Generate screen info here
+                    break;
+                case 2:
+                    UARTprintf("\033[?25l");
+                    UARTprintf("\033[2J\033[;H");
+                    UARTprintf("Screen 2");
+                    // Generate screen info here
+                    break;
+                default:
+                    // Do something
+                    break;
+            }
 
 
         }
@@ -191,7 +249,8 @@ int main(void)
             {
                 // Writes HIGH to pins
                 GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_5, GPIO_PIN_5);  // IND2 LED On
-            }
+}
+
         }
     }
 }
