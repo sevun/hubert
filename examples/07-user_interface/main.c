@@ -38,7 +38,6 @@ uint8_t ui8Page;
 // Timers Interrupt Function
 //*****************************************************************************
 volatile bool g_bTimer0Flag = 0;        // Timer 0 occurred flag
-volatile bool g_bTimer1Flag = 0;        // Timer 1 occurred flag
 
 // The interrupt handler for the first timer interrupt. 1 Hz
 void Timer0IntHandler(void)
@@ -47,15 +46,6 @@ void Timer0IntHandler(void)
     TimerIntClear(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
 
     g_bTimer0Flag = 1;      // Set the flag for Timer 0 interrupt
-}
-
-// The interrupt handler for the second timer interrupt. 10 Hz
-void Timer1IntHandler(void)
-{
-    // Clear the timer interrupt.
-    TimerIntClear(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
-
-    g_bTimer1Flag = 1;      // Set flag to indicate Timer 1 interrupt
 }
 
 //*****************************************************************************
@@ -107,23 +97,17 @@ int main(void)
 
     // Enable the peripherals used by this example.
     SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER1);
 
     // Configure the two 32-bit periodic timers.
     TimerConfigure(TIMER0_BASE, TIMER_CFG_PERIODIC);
-    TimerConfigure(TIMER1_BASE, TIMER_CFG_PERIODIC);
-    TimerLoadSet(TIMER0_BASE, TIMER_A, SysCtlClockGet() * 5);      // 5 s
-    TimerLoadSet(TIMER1_BASE, TIMER_A, SysCtlClockGet() / 10);     // 10 Hz
+    TimerLoadSet(TIMER0_BASE, TIMER_A, SysCtlClockGet() * 1);      // 1 Hz
 
     // Setup the interrupts for the timer timeouts.
     IntEnable(INT_TIMER0A);
-    IntEnable(INT_TIMER1A);
     TimerIntEnable(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
-    TimerIntEnable(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
 
     // Enable the timers.
     TimerEnable(TIMER0_BASE, TIMER_A);
-    TimerEnable(TIMER1_BASE, TIMER_A);
 
     //*****************************************************************************
     // UART Setup
@@ -146,6 +130,10 @@ int main(void)
     // Main Code
     //*****************************************************************************
 
+    UARTprintf("\033[?25l");            // Hide the cursor
+    UARTprintf("\033[2J");              // Clear the screen
+    UARTprintf("\033[;H");              // Move cursor to home position
+
     while(1)
     {
         // UART 0
@@ -155,30 +143,39 @@ int main(void)
 
             while( UARTCharsAvail(UART0_BASE) ) //loop while there are chars
             {
-                char bleh = UARTCharGetNonBlocking(UART0_BASE);
+                // Blink IND2 when a character is received
+                GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_5, GPIO_PIN_5);  // IND2 LED On
+                SysCtlDelay(SysCtlClockGet()/1500);                     // Delay 2 ms
+                GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_5, 0);           // IND2 LED Off
 
-                switch ( bleh )
+                uint8_t ui8OldPage = ui8Page;
+                uint8_t ui8NewPage = UARTCharGetNonBlocking(UART0_BASE);
+
+                // Set which screen is being requested
+                switch ( ui8NewPage )
                 {
                     case '0':
                         ui8Page = 0;
-                        // Generate screen info here
                         break;
                     case '1':
                         ui8Page = 1;
-                        // Generate screen info here
                         break;
                     case '2':
                         ui8Page = 2;
-                        // Generate screen info here
                         break;
                     default:
-                        // Generate screen info here
                         break;
+                }
+
+                // Clear the screen if the page has changed
+                if ( ui8Page != ui8OldPage )
+                {
+                    UARTprintf("\033[2J");              // Clear the screen
                 }
             }
         }
 
-        // Timer x0
+        // Timer 0
         if ( 1 == g_bTimer0Flag )
         {
             g_bTimer0Flag = 0;  // Clear the flag for Timer 0 interrupt
@@ -198,8 +195,7 @@ int main(void)
             switch ( ui8Page )
             {
                 case 0:
-                    UARTprintf("\033[?25l");
-                    UARTprintf("\033[2J\033[;H");
+                    UARTprintf("\033[;H");              // Move cursor to home position
                     UARTprintf("(c) Sevun Scientific, Inc.");
                     UARTprintf("\r\nPower Brick Armor Panel Controller");
 
@@ -215,14 +211,12 @@ int main(void)
                     UARTprintf("\r\n            ___\\///////////_______\\///////////_____\\///////////__");
                     break;
                 case 1:
-                    UARTprintf("\033[?25l");
-                    UARTprintf("\033[2J\033[;H");
+                    UARTprintf("\033[;H");              // Move cursor to home position
                     UARTprintf("Screen 1");
                     // Generate screen info here
                     break;
                 case 2:
-                    UARTprintf("\033[?25l");
-                    UARTprintf("\033[2J\033[;H");
+                    UARTprintf("\033[;H");              // Move cursor to home position
                     UARTprintf("Screen 2");
                     // Generate screen info here
                     break;
@@ -230,27 +224,6 @@ int main(void)
                     // Do something
                     break;
             }
-
-
-        }
-
-        // Timer 0
-        if ( 1 == g_bTimer1Flag )
-        {
-            g_bTimer1Flag = 0;  // Clear the flag for Timer 1 interrupt
-
-            // Check the current value of the pin, then flip it
-            if ( GPIO_PIN_5 == GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_5) )
-            {
-                // Writes HIGH to pins
-                GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_5, 0);           // IND2 LED Off
-            }
-            else
-            {
-                // Writes HIGH to pins
-                GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_5, GPIO_PIN_5);  // IND2 LED On
-}
-
         }
     }
 }
