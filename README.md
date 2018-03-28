@@ -20,5 +20,13 @@ They are tailored to match the Hubert hardware.
 6. **UART**
 	1. **UART Echo with Polling** - Reads character using polling on UART0 Rx and echoes it to UART0 Tx
 	2. **UART Echo with Interrupts** - Reads character using interrupt on UART0 Rx and echoes it to UART0 Tx
-7. **User Interface** - Uses slow timer for formatting, fast timer for data, and display over UART
-0. **Hibernate** - Use the hibernate module to sleep between blinking IND1.
+7. **User Interface** - Uses a timer to update the display and UART receive to change screens
+0. **Hibernate**
+	1. **Blink, Hibernate, Repeat** - Use the hibernate module to sleep between blinking IND1
+	2. **SW1 Hibernate** - Hibernate of SW1 is pressed for a set period of time
+0. **SD Card** - TBD
+0. **I2C**
+	1. **Accelerometer and Magnetometer** - TBD
+	2. **Gyroscope** - TBD
+	3. **Temperature** - TBD
+	4. **Humidity** - TBD
