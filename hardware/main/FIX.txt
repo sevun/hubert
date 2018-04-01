@@ -1,0 +1,3 @@
+- Fix footpritn for buttons
+- Change R5 to 560 Ohm (from 100 kOhm) for the wake pull down value
+- Maybe, look at using sUNREG as the input voltage to VBAT, hibernate will work on USB power
