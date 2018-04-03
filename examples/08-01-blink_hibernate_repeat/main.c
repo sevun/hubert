@@ -33,9 +33,6 @@
 #define UART_SPEED              115200
 #define HIBERNATE_WAKE_DELAY    5
 
-//uint32_t ui32Status;
-//uint32_t pui32NVData[64];
-
 int main(void)
 {
     // Set microcontroller to use the 16 MHz external crystal
@@ -73,33 +70,18 @@ int main(void)
 
     // Perform normal power-on initialization
     SysCtlPeripheralEnable(SYSCTL_PERIPH_HIBERNATE);
-//    while(!SysCtlPeripheralReady(SYSCTL_PERIPH_HIBERNATE)) {}
+    while(!SysCtlPeripheralReady(SYSCTL_PERIPH_HIBERNATE)) {}
     HibernateEnableExpClk(SysCtlClockGet());
     HibernateGPIORetentionEnable();
-
-//    SysCtlDelay(SysCtlClockGet()/3);                        // Delay 1 second
-
-//    HibernateClockConfig( HIBERNATE_OSC_HIGHDRIVE );
+    SysCtlDelay(SysCtlClockGet()/3);                        // Delay 1 second
     HibernateRTCEnable();
-
-    HibernateRTCSet(0);
-
-    HibernateRTCMatchSet(0,HibernateRTCGet()+HIBERNATE_WAKE_DELAY);
-
-//    ui32Status = HibernateIntStatus(0);
-//    HibernateIntClear(ui32Status);
-
-//    HibernateDataSet(pui32NVData, 16);
-
     HibernateWakeSet(HIBERNATE_WAKE_PIN | HIBERNATE_WAKE_RTC );
-
-//    HibernateCounterMode(HIBERNATE_COUNTER_RTC);
 
     //*****************************************************************************
     // Main Code
     //*****************************************************************************
 
-    UARTprintf("x");
+    UARTprintf("\r\n%d",0);
 
     // Writes HIGH to pins
     GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, GPIO_PIN_2);  // IND1 LED On
@@ -107,6 +89,8 @@ int main(void)
     GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, 0);           // IND2 LED Off
     SysCtlDelay(SysCtlClockGet()/3);                        // Delay 1 second
 
+    HibernateRTCSet(0);
+    HibernateRTCMatchSet(0,HibernateRTCGet()+HIBERNATE_WAKE_DELAY);
     HibernateRequest();
 
     while(1)  // Repeats this section over and over
