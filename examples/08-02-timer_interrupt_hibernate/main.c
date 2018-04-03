@@ -33,6 +33,26 @@
 #define UART_SPEED              115200
 #define HIBERNATE_WAKE_DELAY    5
 
+//*****************************************************************************
+// Hibernate Interrupt Function
+//*****************************************************************************
+volatile bool g_bHibernateFlag = 0;        // Timer 0 occurred flag
+
+void HibernateHandler(void)
+{
+    uint32_t ui32Status;
+
+    // Get the interrupt status and clear any pending interrupts.
+    ui32Status = HibernateIntStatus(1);
+    HibernateIntClear(ui32Status);
+
+    // Process the RTC match 0 interrupt.
+    if(ui32Status & HIBERNATE_INT_RTC_MATCH_0)
+    {
+        g_bHibernateFlag = 1;
+    }
+}
+
 int main(void)
 {
     // Set microcontroller to use the 16 MHz external crystal
@@ -72,25 +92,40 @@ int main(void)
     SysCtlPeripheralEnable(SYSCTL_PERIPH_HIBERNATE);
     while(!SysCtlPeripheralReady(SYSCTL_PERIPH_HIBERNATE)) {}
     HibernateEnableExpClk(SysCtlClockGet());
-    HibernateGPIORetentionEnable();
+//    HibernateGPIORetentionEnable();
     SysCtlDelay(SysCtlClockGet()/3/50); // Delay 2 ms
-    HibernateClockConfig( HIBERNATE_OSC_HIGHDRIVE );
+    HibernateClockConfig(HIBERNATE_OSC_HIGHDRIVE);
     HibernateRTCEnable();
-    HibernateWakeSet(HIBERNATE_WAKE_PIN | HIBERNATE_WAKE_RTC);
+//    HibernateWakeSet(HIBERNATE_WAKE_PIN | HIBERNATE_WAKE_RTC);
+
+    HibernateRTCSet(0);
+    HibernateRTCMatchSet(0,HibernateRTCGet()+HIBERNATE_WAKE_DELAY);
+
+    HibernateIntEnable(HIBERNATE_INT_RTC_MATCH_0);
+    HibernateIntClear(HIBERNATE_INT_PIN_WAKE | HIBERNATE_INT_LOW_BAT | HIBERNATE_INT_RTC_MATCH_0);
+    HibernateIntRegister(HibernateHandler);
 
     //*****************************************************************************
     // Main Code
     //*****************************************************************************
 
-    UARTprintf("\r\n%d seconds",HibernateRTCGet());
+    while(1)
+    {
+        if ( 1 == g_bHibernateFlag )
+        {
+            g_bHibernateFlag = 0;
 
-    // Writes HIGH to pins
-    GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, GPIO_PIN_4);  // IND1 LED On
-    SysCtlDelay(SysCtlClockGet()/3/10);                     // Delay 0.1 second
-    GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, 0);           // IND2 LED Off
+            // RTC match 0 interrupt actions go here
+            HibernateRTCMatchSet(0,HibernateRTCGet()+HIBERNATE_WAKE_DELAY);
 
-    HibernateRTCMatchSet(0,HibernateRTCGet()+HIBERNATE_WAKE_DELAY);
-    HibernateRequest();
+            UARTprintf("\r\n%d seconds",HibernateRTCGet());
 
-    while(1) {}  // Repeats this section over and over
+            // Writes HIGH to pins
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, GPIO_PIN_4);  // IND1 LED On
+            SysCtlDelay(SysCtlClockGet()/3/10);                     // Delay 0.1 second
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, 0);           // IND2 LED Off
+
+            HibernateRequest();
+        }
+    }
 }

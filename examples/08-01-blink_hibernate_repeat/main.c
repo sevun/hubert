@@ -74,7 +74,7 @@ int main(void)
     HibernateEnableExpClk(SysCtlClockGet());
     HibernateGPIORetentionEnable();
     SysCtlDelay(SysCtlClockGet()/3/50); // Delay 2 ms
-    HibernateClockConfig( HIBERNATE_OSC_HIGHDRIVE );
+    HibernateClockConfig(HIBERNATE_OSC_HIGHDRIVE);
     HibernateRTCEnable();
     HibernateWakeSet(HIBERNATE_WAKE_PIN | HIBERNATE_WAKE_RTC);
 
