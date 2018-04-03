@@ -73,9 +73,10 @@ int main(void)
     while(!SysCtlPeripheralReady(SYSCTL_PERIPH_HIBERNATE)) {}
     HibernateEnableExpClk(SysCtlClockGet());
     HibernateGPIORetentionEnable();
-    SysCtlDelay(SysCtlClockGet()/3/50);                        // Delay 2 ms
+    SysCtlDelay(SysCtlClockGet()/3/50); // Delay 2 ms
+    HibernateClockConfig( HIBERNATE_OSC_HIGHDRIVE );
     HibernateRTCEnable();
-    HibernateWakeSet( HIBERNATE_WAKE_PIN | HIBERNATE_WAKE_RTC );
+    HibernateWakeSet(HIBERNATE_WAKE_PIN | HIBERNATE_WAKE_RTC);
 
     //*****************************************************************************
     // Main Code
