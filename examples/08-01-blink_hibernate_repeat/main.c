@@ -39,14 +39,14 @@ int main(void)
     SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN | SYSCTL_XTAL_16MHZ);
 
     //*****************************************************************************
-    // GPIO Setup
+    // Pins Setup
     //*****************************************************************************
 
     // Enable the Port C peripheral
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
 
     // Sets the pin associated with IND1 to be an output
-    GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_2);
+    GPIOPinTypeGPIOOutput(GPIO_PORTC_BASE, GPIO_PIN_4);
 
     //*****************************************************************************
     // UART Setup
@@ -73,27 +73,23 @@ int main(void)
     while(!SysCtlPeripheralReady(SYSCTL_PERIPH_HIBERNATE)) {}
     HibernateEnableExpClk(SysCtlClockGet());
     HibernateGPIORetentionEnable();
-    SysCtlDelay(SysCtlClockGet()/3);                        // Delay 1 second
+    SysCtlDelay(SysCtlClockGet()/3/50);                        // Delay 2 ms
     HibernateRTCEnable();
-    HibernateWakeSet(HIBERNATE_WAKE_PIN | HIBERNATE_WAKE_RTC );
+    HibernateWakeSet( HIBERNATE_WAKE_PIN | HIBERNATE_WAKE_RTC );
 
     //*****************************************************************************
     // Main Code
     //*****************************************************************************
 
-    UARTprintf("\r\n%d",0);
+    UARTprintf("\r\n%d seconds",HibernateRTCGet());
 
     // Writes HIGH to pins
-    GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, GPIO_PIN_2);  // IND1 LED On
+    GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, GPIO_PIN_4);  // IND1 LED On
     SysCtlDelay(SysCtlClockGet()/3/10);                     // Delay 0.1 second
-    GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, 0);           // IND2 LED Off
-    SysCtlDelay(SysCtlClockGet()/3);                        // Delay 1 second
+    GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, 0);           // IND2 LED Off
 
-    HibernateRTCSet(0);
     HibernateRTCMatchSet(0,HibernateRTCGet()+HIBERNATE_WAKE_DELAY);
     HibernateRequest();
 
-    while(1)  // Repeats this section over and over
-    {
-    }
+    while(1) {}  // Repeats this section over and over
 }
