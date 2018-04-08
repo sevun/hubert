@@ -76,7 +76,7 @@ int main(void)
     SysCtlDelay(SysCtlClockGet()/3/50); // Delay 2 ms
     HibernateClockConfig(HIBERNATE_OSC_HIGHDRIVE);
     HibernateRTCEnable();
-    HibernateRTCTrimSet (0x7FFF);   // This line is neccessary due to bug in Hibernate
+    HibernateRTCTrimSet (0x7FFF);   // This line is necessary due to bug in Hibernate
     HibernateWakeSet(HIBERNATE_WAKE_PIN | HIBERNATE_WAKE_RTC);
 
     //*****************************************************************************
