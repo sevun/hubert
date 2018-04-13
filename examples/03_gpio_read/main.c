@@ -16,7 +16,7 @@
  *            ___\///////////_______\///////////_____\///////////__
  *
  * *****************************************************************
- * SW1 in put uses negative logic.  When button is not pressed it
+ * SW1 input uses negative logic.  When button is not pressed it
  *  reads 1, but when the button is pressed it reads 0
  */
 
@@ -42,7 +42,7 @@ int main(void)
     // Runs this code repeatedly (called polling)
     while(1)
     {
-        if ( GPIO_PIN_4 == GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_4) )
+        if ( GPIO_PIN_4 == GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_4) ) //GPIOPinRead(,) returns a masked 32 bit integer which is compared to GPIO_PIN_4
         {
             GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_5, 0);           // IND2 LED off
         }
