@@ -40,7 +40,20 @@ volatile bool g_bHibernateFlag = 0;        // Timer 0 occurred flag
 
 void HibernateHandler(void)
 {
+    uint32_t ui32Status;
 
+    // Get the interrupt status and clear any pending interrupts.
+    ui32Status = HibernateIntStatus(true);
+
+    UARTprintf("\r\n0x%04x",ui32Status);  // FIXME figure out why this returns 0
+
+    HibernateIntClear(ui32Status);
+
+    // Process the RTC match 0 interrupt.
+    if(ui32Status & HIBERNATE_INT_RTC_MATCH_0)
+    {
+        UARTprintf("\r\ny");
+    }
 }
 
 int main(void)
@@ -56,6 +69,7 @@ int main(void)
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
 
     // Sets the pin associated with IND1 to be an output
+    GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_2);
     GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_3);
 
     //*****************************************************************************
@@ -85,8 +99,13 @@ int main(void)
     HibernateGPIORetentionEnable();
     SysCtlDelay(SysCtlClockGet()/3/50); // Delay 2 ms
     HibernateClockConfig(HIBERNATE_OSC_HIGHDRIVE);
+    HibernateRTCTrimSet(0x7FFF);
     HibernateRTCEnable();
     HibernateWakeSet(HIBERNATE_WAKE_PIN | HIBERNATE_WAKE_RTC);
+
+    HibernateIntEnable(HIBERNATE_INT_RTC_MATCH_0);
+    HibernateIntClear(HIBERNATE_INT_PIN_WAKE | HIBERNATE_INT_LOW_BAT | HIBERNATE_INT_RTC_MATCH_0);
+    HibernateIntRegister(HibernateHandler);
 
     //*****************************************************************************
     // Main Code
