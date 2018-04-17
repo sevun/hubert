@@ -101,9 +101,16 @@ int main(void)
     // Hibernate Setup
     //*****************************************************************************
 
+
+    if( !HibernateIsActive() )
+    {
+        UARTprintf("\r\nHyberate is not active.  Setting to active ...");
+    }
+
     // Perform normal power-on initialization
     SysCtlPeripheralEnable(SYSCTL_PERIPH_HIBERNATE);
     while(!SysCtlPeripheralReady(SYSCTL_PERIPH_HIBERNATE)) {}
+
     HibernateEnableExpClk(SysCtlClockGet());
     HibernateGPIORetentionEnable();
     SysCtlDelay(SysCtlClockGet()/3/50); // Delay 2 ms
@@ -119,8 +126,6 @@ int main(void)
 
     if( !HibernateIsActive() )
     {
-        UARTprintf("\r\nHyberate is not active.  Setting to active ...");
-
         HibernateRTCMatchSet(0,HibernateRTCGet()+HIBERNATE_WAKE_DELAY);
         HibernateRequest();
     }
@@ -133,7 +138,8 @@ int main(void)
     {
         if( 1 == g_bHibernateFlag )
         {
-            UARTprintf("\r\n%d seconds 1",HibernateRTCGet());
+            UARTprintf("\r\nRevision %d",4);
+            UARTprintf("\r\n%d seconds",HibernateRTCGet());
 
             // Writes HIGH to pins
             GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, GPIO_PIN_2);  // IND1 LED On
