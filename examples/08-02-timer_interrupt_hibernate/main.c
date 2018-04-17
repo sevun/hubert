@@ -101,11 +101,18 @@ int main(void)
     // Hibernate Setup
     //*****************************************************************************
 
-
     if( !HibernateIsActive() )
     {
-        UARTprintf("\r\nHyberate is not active.  Setting to active ...");
+        UARTprintf("\r\nTOP Hyberate is not active.  Setting to active ...");
     }
+    else
+    {
+        UARTprintf("\r\nTOP Hyberate is  active.");
+    }
+
+    // Perform normal power-on initialization
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_HIBERNATE);
+    while(!SysCtlPeripheralReady(SYSCTL_PERIPH_HIBERNATE)) {}
 
     // Perform normal power-on initialization
     SysCtlPeripheralEnable(SYSCTL_PERIPH_HIBERNATE);
@@ -126,8 +133,13 @@ int main(void)
 
     if( !HibernateIsActive() )
     {
+        UARTprintf("\r\nBOTTOM Hyberate is not active.  Setting to active ...");
         HibernateRTCMatchSet(0,HibernateRTCGet()+HIBERNATE_WAKE_DELAY);
         HibernateRequest();
+    }
+    else
+    {
+        UARTprintf("\r\nBOTTOM Hyberate is  active.");
     }
 
     //*****************************************************************************
@@ -138,7 +150,7 @@ int main(void)
     {
         if( 1 == g_bHibernateFlag )
         {
-            UARTprintf("\r\nRevision %d",4);
+            UARTprintf("\r\nRevision %d",5);
             UARTprintf("\r\n%d seconds",HibernateRTCGet());
 
             // Writes HIGH to pins
