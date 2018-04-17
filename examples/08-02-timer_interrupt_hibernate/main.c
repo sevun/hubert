@@ -42,19 +42,27 @@ volatile bool g_bHibernateFlag = 0;        // Timer 0 occurred flag
 
 void HibernateHandler(void)
 {
+    g_bHibernateFlag = 1;
     uint32_t ui32Status;
 
     // Get the interrupt status and clear any pending interrupts.
     ui32Status = HibernateIntStatus(true);
-
-    UARTprintf("\r\n0x%04x",ui32Status);  // FIXME figure out why this returns 0
-
     HibernateIntClear(ui32Status);
 
     // Process the RTC match 0 interrupt.
     if(ui32Status & HIBERNATE_INT_RTC_MATCH_0)
     {
-        UARTprintf("\r\ny");
+        UARTprintf("\r\nWake due to RTC Match 0.");
+    }
+    // Process the RTC match 0 interrupt.
+    if(ui32Status & HIBERNATE_INT_LOW_BAT)
+    {
+        UARTprintf("\r\nWake due to low battery.");
+    }
+    // Process the RTC match 0 interrupt.
+    if(ui32Status & HIBERNATE_INT_PIN_WAKE)
+    {
+        UARTprintf("\r\nWake due to wake pin.");
     }
 }
 
@@ -108,8 +116,8 @@ int main(void)
     HibernateWakeSet(HIBERNATE_WAKE_PIN | HIBERNATE_WAKE_RTC);
 
     IntEnable(INT_HIBERNATE_TM4C123);
-    HibernateIntEnable(HIBERNATE_INT_RTC_MATCH_0);
-    HibernateIntClear(HIBERNATE_INT_PIN_WAKE | HIBERNATE_INT_LOW_BAT | HIBERNATE_INT_RTC_MATCH_0);
+    HibernateIntEnable(HIBERNATE_INT_RTC_MATCH_0 | HIBERNATE_INT_LOW_BAT | HIBERNATE_INT_PIN_WAKE);
+    HibernateIntClear(HIBERNATE_INT_RTC_MATCH_0 | HIBERNATE_INT_LOW_BAT | HIBERNATE_INT_PIN_WAKE);
     HibernateIntRegister(HibernateHandler);
 
     //*****************************************************************************
@@ -127,5 +135,11 @@ int main(void)
     HibernateRTCMatchSet(0,HibernateRTCGet()+HIBERNATE_WAKE_DELAY);
     HibernateRequest();
 
-    while(1) {}  // Repeats this section over and over
+    while(1)
+    {
+        if( 1 == g_bHibernateFlag )
+        {
+            g_bHibernateFlag = 0;
+        }
+    }
 }
