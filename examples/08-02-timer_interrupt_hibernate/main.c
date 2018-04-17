@@ -110,38 +110,38 @@ int main(void)
     HibernateClockConfig(HIBERNATE_OSC_HIGHDRIVE);
     HibernateRTCTrimSet(0x7FFF);
     HibernateRTCEnable();
-    HibernateWakeSet(HIBERNATE_WAKE_PIN | HIBERNATE_WAKE_RTC);
+    HibernateWakeSet(HIBERNATE_WAKE_RTC | HIBERNATE_WAKE_LOW_BAT | HIBERNATE_WAKE_PIN );
 
     IntEnable(INT_HIBERNATE_TM4C123);
     HibernateIntEnable(HIBERNATE_INT_RTC_MATCH_0 | HIBERNATE_INT_LOW_BAT | HIBERNATE_INT_PIN_WAKE);
     HibernateIntClear(HIBERNATE_INT_RTC_MATCH_0 | HIBERNATE_INT_LOW_BAT | HIBERNATE_INT_PIN_WAKE);
     HibernateIntRegister(HibernateHandler);
 
+    if( !HibernateIsActive() )
+    {
+        UARTprintf("\r\nHyberate is not active.  Setting to active ...");
+
+        HibernateRTCMatchSet(0,HibernateRTCGet()+HIBERNATE_WAKE_DELAY);
+        HibernateRequest();
+    }
+
     //*****************************************************************************
     // Main Code
     //*****************************************************************************
-
-    uint32_t ui32RTCTime;
-
-    ui32RTCTime = HibernateRTCGet();
-
-    UARTprintf("\r\n%d seconds",ui32RTCTime);
-
-    // Writes HIGH to pins
-    GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, GPIO_PIN_2);  // IND1 LED On
-    SysCtlDelay(SysCtlClockGet()/3/10);                     // Delay 0.1 second
-    GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, 0);           // IND2 LED Off
-
-
 
     while(1)
     {
         if( 1 == g_bHibernateFlag )
         {
-            g_bHibernateFlag = 0;
-        }
+            UARTprintf("\r\n%d seconds 1",HibernateRTCGet());
 
-        HibernateRTCMatchSet(0,HibernateRTCGet()+HIBERNATE_WAKE_DELAY);
-        HibernateRequest();
+            // Writes HIGH to pins
+            GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, GPIO_PIN_2);  // IND1 LED On
+            SysCtlDelay(SysCtlClockGet()/3/10);                     // Delay 0.1 second
+            GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, 0);           // IND2 LED Off
+
+            HibernateRTCMatchSet(0,HibernateRTCGet()+HIBERNATE_WAKE_DELAY);
+            HibernateRequest();
+        }
     }
 }
