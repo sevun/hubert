@@ -22,12 +22,14 @@
 #include <stdbool.h>
 #include "utils/ustdlib.h"
 #include "inc/hw_types.h"
+#include "inc/hw_ints.h"
 #include "inc/hw_memmap.h"
 #include "driverlib/sysctl.h"
 #include "driverlib/pin_map.h"
 #include "driverlib/debug.h"
 #include "driverlib/hibernate.h"
 #include "driverlib/gpio.h"
+#include "driverlib/interrupt.h"
 #include "utils/uartstdio.h"
 
 #define UART_SPEED              115200
@@ -105,6 +107,7 @@ int main(void)
     HibernateRTCEnable();
     HibernateWakeSet(HIBERNATE_WAKE_PIN | HIBERNATE_WAKE_RTC);
 
+    IntEnable(INT_HIBERNATE_TM4C123);
     HibernateIntEnable(HIBERNATE_INT_RTC_MATCH_0);
     HibernateIntClear(HIBERNATE_INT_PIN_WAKE | HIBERNATE_INT_LOW_BAT | HIBERNATE_INT_RTC_MATCH_0);
     HibernateIntRegister(HibernateHandler);
