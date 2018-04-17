@@ -56,6 +56,9 @@ void HibernateHandler(void)
     }
 }
 
+uint32_t ui32Status;
+uint32_t pui32NVData[64];
+
 int main(void)
 {
     // Set microcontroller to use the 16 MHz external crystal
@@ -70,7 +73,6 @@ int main(void)
 
     // Sets the pin associated with IND1 to be an output
     GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_2);
-    GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_3);
 
     //*****************************************************************************
     // UART Setup
@@ -115,9 +117,9 @@ int main(void)
     UARTprintf("\r\n%d seconds",ui32RTCTime);
 
     // Writes HIGH to pins
-    GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_3, GPIO_PIN_3);  // IND1 LED On
+    GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, GPIO_PIN_2);  // IND1 LED On
     SysCtlDelay(SysCtlClockGet()/3/10);                     // Delay 0.1 second
-    GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_3, 0);           // IND2 LED Off
+    GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, 0);           // IND2 LED Off
 
     HibernateRTCMatchSet(0,HibernateRTCGet()+HIBERNATE_WAKE_DELAY);
     HibernateRequest();
