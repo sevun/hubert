@@ -66,9 +66,6 @@ void HibernateHandler(void)
     }
 }
 
-uint32_t ui32Status;
-uint32_t pui32NVData[64];
-
 int main(void)
 {
     // Set microcontroller to use the 16 MHz external crystal
@@ -124,7 +121,10 @@ int main(void)
     // Main Code
     //*****************************************************************************
 
-    uint32_t ui32RTCTime = HibernateRTCGet();
+    uint32_t ui32RTCTime;
+
+    ui32RTCTime = HibernateRTCGet();
+
     UARTprintf("\r\n%d seconds",ui32RTCTime);
 
     // Writes HIGH to pins
@@ -132,8 +132,7 @@ int main(void)
     SysCtlDelay(SysCtlClockGet()/3/10);                     // Delay 0.1 second
     GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, 0);           // IND2 LED Off
 
-    HibernateRTCMatchSet(0,HibernateRTCGet()+HIBERNATE_WAKE_DELAY);
-    HibernateRequest();
+
 
     while(1)
     {
@@ -141,5 +140,8 @@ int main(void)
         {
             g_bHibernateFlag = 0;
         }
+
+        HibernateRTCMatchSet(0,HibernateRTCGet()+HIBERNATE_WAKE_DELAY);
+        HibernateRequest();
     }
 }
