@@ -38,8 +38,6 @@
 //*****************************************************************************
 // Hibernate Interrupt Function
 //*****************************************************************************
-volatile bool g_bHibernateFlag = 0;        // Timer 0 occurred flag
-
 void HibernateHandler(void)
 {
     g_bHibernateFlag = 1;
@@ -76,10 +74,10 @@ int main(void)
     //*****************************************************************************
 
     // Enable the Port C peripheral
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
 
     // Sets the pin associated with IND1 to be an output
-    GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_2);
+    GPIOPinTypeGPIOOutput(GPIO_PORTC_BASE, GPIO_PIN_4);
 
     //*****************************************************************************
     // UART Setup
@@ -105,14 +103,6 @@ int main(void)
     {
         UARTprintf("\r\nTOP Hyberate is not active.  Setting to active ...");
     }
-    else
-    {
-        UARTprintf("\r\nTOP Hyberate is  active.");
-    }
-
-    // Perform normal power-on initialization
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_HIBERNATE);
-    while(!SysCtlPeripheralReady(SYSCTL_PERIPH_HIBERNATE)) {}
 
     // Perform normal power-on initialization
     SysCtlPeripheralEnable(SYSCTL_PERIPH_HIBERNATE);
@@ -122,7 +112,7 @@ int main(void)
     HibernateGPIORetentionEnable();
     SysCtlDelay(SysCtlClockGet()/3/50); // Delay 2 ms
     HibernateClockConfig(HIBERNATE_OSC_HIGHDRIVE);
-    HibernateRTCTrimSet(0x7FFF);
+    HibernateRTCTrimSet (0x7FFF);   // This line is necessary due to bug in Hibernate
     HibernateRTCEnable();
     HibernateWakeSet(HIBERNATE_WAKE_RTC | HIBERNATE_WAKE_LOW_BAT | HIBERNATE_WAKE_PIN );
 
@@ -131,35 +121,19 @@ int main(void)
     HibernateIntClear(HIBERNATE_INT_RTC_MATCH_0 | HIBERNATE_INT_LOW_BAT | HIBERNATE_INT_PIN_WAKE);
     HibernateIntRegister(HibernateHandler);
 
-    if( !HibernateIsActive() )
-    {
-        UARTprintf("\r\nBOTTOM Hyberate is not active.  Setting to active ...");
-        HibernateRTCMatchSet(0,HibernateRTCGet()+HIBERNATE_WAKE_DELAY);
-        HibernateRequest();
-    }
-    else
-    {
-        UARTprintf("\r\nBOTTOM Hyberate is  active.");
-    }
-
     //*****************************************************************************
     // Main Code
     //*****************************************************************************
 
-    while(1)
-    {
-        if( 1 == g_bHibernateFlag )
-        {
-            UARTprintf("\r\nRevision %d",5);
-            UARTprintf("\r\n%d seconds",HibernateRTCGet());
+    UARTprintf("\r\n%d seconds",HibernateRTCGet());
 
-            // Writes HIGH to pins
-            GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, GPIO_PIN_2);  // IND1 LED On
-            SysCtlDelay(SysCtlClockGet()/3/10);                     // Delay 0.1 second
-            GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, 0);           // IND2 LED Off
+    // Writes HIGH to pins
+    GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, GPIO_PIN_4);  // IND1 LED On
+    SysCtlDelay(SysCtlClockGet()/3/10);                     // Delay 0.1 second
+    GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, 0);           // IND2 LED Off
 
-            HibernateRTCMatchSet(0,HibernateRTCGet()+HIBERNATE_WAKE_DELAY);
-            HibernateRequest();
-        }
-    }
+    HibernateRTCMatchSet(0,HibernateRTCGet()+HIBERNATE_WAKE_DELAY);
+    HibernateRequest();
+
+    while(1) {}
 }
