@@ -40,7 +40,6 @@
 //*****************************************************************************
 void HibernateHandler(void)
 {
-    g_bHibernateFlag = 1;
     uint32_t ui32Status;
 
     // Get the interrupt status and clear any pending interrupts.
