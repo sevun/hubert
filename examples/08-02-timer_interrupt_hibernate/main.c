@@ -38,6 +38,9 @@
 //*****************************************************************************
 // Hibernate Interrupt Function
 //*****************************************************************************
+volatile bool g_bRTCMatchFlag;
+volatile bool g_bWakePinFlag;
+
 void HibernateHandler(void)
 {
     uint32_t ui32Status;
@@ -49,16 +52,14 @@ void HibernateHandler(void)
     // Process the RTC match 0 interrupt.
     if(ui32Status & HIBERNATE_INT_RTC_MATCH_0)
     {
+        g_bRTCMatchFlag = 1;
         UARTprintf("\r\nWake due to RTC Match 0.");
     }
-    // Process the RTC match 0 interrupt.
-    if(ui32Status & HIBERNATE_INT_LOW_BAT)
-    {
-        UARTprintf("\r\nWake due to low battery.");
-    }
+
     // Process the RTC match 0 interrupt.
     if(ui32Status & HIBERNATE_INT_PIN_WAKE)
     {
+        g_bWakePinFlag = 1;
         UARTprintf("\r\nWake due to wake pin.");
     }
 }
@@ -77,6 +78,7 @@ int main(void)
 
     // Sets the pin associated with IND1 to be an output
     GPIOPinTypeGPIOOutput(GPIO_PORTC_BASE, GPIO_PIN_4);
+    GPIOPinTypeGPIOOutput(GPIO_PORTC_BASE, GPIO_PIN_5);
 
     //*****************************************************************************
     // UART Setup
@@ -100,7 +102,7 @@ int main(void)
 
     if( !HibernateIsActive() )
     {
-        UARTprintf("\r\nTOP Hibernate is not active.  Trying to set to active ...");
+        UARTprintf("\r\nHibernate is not active.  Trying to set active ...");
 
         // Perform normal power-on initialization
         SysCtlPeripheralEnable(SYSCTL_PERIPH_HIBERNATE);
@@ -112,26 +114,45 @@ int main(void)
         HibernateClockConfig(HIBERNATE_OSC_HIGHDRIVE);
         HibernateRTCTrimSet (0x7FFF);   // This line is necessary due to bug in Hibernate
         HibernateRTCEnable();
-        HibernateWakeSet(HIBERNATE_WAKE_RTC | HIBERNATE_WAKE_LOW_BAT | HIBERNATE_WAKE_PIN );
+        HibernateWakeSet(HIBERNATE_WAKE_RTC | HIBERNATE_WAKE_PIN );
+
+        HibernateIntEnable(HIBERNATE_INT_RTC_MATCH_0 | HIBERNATE_INT_PIN_WAKE);
+        HibernateIntClear(HIBERNATE_INT_RTC_MATCH_0 | HIBERNATE_INT_PIN_WAKE);
+        HibernateIntRegister(HibernateHandler);
     }
 
     IntEnable(INT_HIBERNATE_TM4C123);
-    HibernateIntEnable(HIBERNATE_INT_RTC_MATCH_0 | HIBERNATE_INT_LOW_BAT | HIBERNATE_INT_PIN_WAKE);
-    HibernateIntClear(HIBERNATE_INT_RTC_MATCH_0 | HIBERNATE_INT_LOW_BAT | HIBERNATE_INT_PIN_WAKE);
-    HibernateIntRegister(HibernateHandler);
 
     //*****************************************************************************
     // Main Code
     //*****************************************************************************
 
-    UARTprintf("\r\n%d seconds",HibernateRTCGet());
+    if (1 == g_bRTCMatchFlag)
+    {
+        g_bRTCMatchFlag = 0;
 
-    // Writes HIGH to pins
-    GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, GPIO_PIN_4);  // IND1 LED On
-    SysCtlDelay(SysCtlClockGet()/3/10);                     // Delay 0.1 second
-    GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, 0);           // IND2 LED Off
+        GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, GPIO_PIN_4);  // IND1 LED On
+        SysCtlDelay(SysCtlClockGet()/3/10);                     // Delay 0.1 second
+        GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, 0);           // IND1 LED Off
+    }
 
-    HibernateRTCMatchSet(0,HibernateRTCGet()+HIBERNATE_WAKE_DELAY);
+    if (1 == g_bWakePinFlag)
+    {
+        g_bWakePinFlag = 0;
+
+        GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_5, GPIO_PIN_5);  // IND2 LED On
+        SysCtlDelay(SysCtlClockGet()/3/10);                     // Delay 0.1 second
+        GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_5, 0);           // IND2 LED Off
+    }
+
+    uint32_t ui32RTCTime;
+    ui32RTCTime = HibernateRTCGet();
+
+    SysCtlDelay(SysCtlClockGet()/3/50); // Delay 2 ms
+    UARTprintf("\r\n%d seconds",ui32RTCTime);
+    SysCtlDelay(SysCtlClockGet()/3/50); // Delay 2 ms
+
+    HibernateRTCMatchSet(0,ui32RTCTime+HIBERNATE_WAKE_DELAY);
     HibernateRequest();
 
     while(1) {}
