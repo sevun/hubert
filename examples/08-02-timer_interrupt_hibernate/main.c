@@ -100,20 +100,20 @@ int main(void)
 
     if( !HibernateIsActive() )
     {
-        UARTprintf("\r\nTOP Hyberate is not active.  Setting to active ...");
+        UARTprintf("\r\nTOP Hibernate is not active.  Trying to set to active ...");
+
+        // Perform normal power-on initialization
+        SysCtlPeripheralEnable(SYSCTL_PERIPH_HIBERNATE);
+        while(!SysCtlPeripheralReady(SYSCTL_PERIPH_HIBERNATE)) {}
+
+        HibernateEnableExpClk(SysCtlClockGet());
+        HibernateGPIORetentionEnable();
+        SysCtlDelay(SysCtlClockGet()/3/50); // Delay 2 ms
+        HibernateClockConfig(HIBERNATE_OSC_HIGHDRIVE);
+        HibernateRTCTrimSet (0x7FFF);   // This line is necessary due to bug in Hibernate
+        HibernateRTCEnable();
+        HibernateWakeSet(HIBERNATE_WAKE_RTC | HIBERNATE_WAKE_LOW_BAT | HIBERNATE_WAKE_PIN );
     }
-
-    // Perform normal power-on initialization
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_HIBERNATE);
-    while(!SysCtlPeripheralReady(SYSCTL_PERIPH_HIBERNATE)) {}
-
-    HibernateEnableExpClk(SysCtlClockGet());
-    HibernateGPIORetentionEnable();
-    SysCtlDelay(SysCtlClockGet()/3/50); // Delay 2 ms
-    HibernateClockConfig(HIBERNATE_OSC_HIGHDRIVE);
-    HibernateRTCTrimSet (0x7FFF);   // This line is necessary due to bug in Hibernate
-    HibernateRTCEnable();
-    HibernateWakeSet(HIBERNATE_WAKE_RTC | HIBERNATE_WAKE_LOW_BAT | HIBERNATE_WAKE_PIN );
 
     IntEnable(INT_HIBERNATE_TM4C123);
     HibernateIntEnable(HIBERNATE_INT_RTC_MATCH_0 | HIBERNATE_INT_LOW_BAT | HIBERNATE_INT_PIN_WAKE);
