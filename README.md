@@ -1,3 +1,4 @@
+
 # Hubert
 Data acquisition platform for remote data collection
 
@@ -24,7 +25,7 @@ They are tailored to match the Hubert hardware.
 0. **Hibernate**
 	1. **Blink, Hibernate, Repeat** - Use the hibernate module to sleep between blinking IND1
 	2. **Timer Interrupt Hibernate** - Wake from hibernate on timer schedule
-	3. **SW1 Hibernate** - Hibernate when SW1 is pressed for a set period of time
+	3. **SW1 Hibernate** - Hibernate when SW1 is pressed for and wake after a set period of time
 0. **SD Card** - TBD
 0. **I2C**
 	1. **Accelerometer and Magnetometer** - TBD
