@@ -1,6 +1,6 @@
 /******************************************************************
  * Hubert Data Logger
- * SW1 Hibernate Example
+ * Auto Hibernate with Wake Example
  * Developed by Sevun Scientific, Inc.
  * http://sevunscientific.com
  * *****************************************************************
@@ -38,6 +38,7 @@
 //*****************************************************************************
 // Hibernate Interrupt Function
 //*****************************************************************************
+volatile bool g_bAwakeFlag;
 
 void HibernateHandler(void)
 {
@@ -57,6 +58,8 @@ void HibernateHandler(void)
     if(ui32Status & HIBERNATE_INT_PIN_WAKE)
     {
         UARTprintf("\r\nWake due to wake pin.");
+        HibernateRTCMatchSet(0,0);  //Clears remaining wake match
+        g_bAwakeFlag = 1;
     }
 }
 
@@ -169,7 +172,7 @@ int main(void)
     while(1)
     {
         // Timer 0
-        if ( 1 == g_bTimer0Flag )
+        if ( (1 == g_bTimer0Flag) & (1 == g_bAwakeFlag)  )
         {
             g_bTimer0Flag = 0;  // Clear the flag for Timer 0 interrupt
 
@@ -188,6 +191,8 @@ int main(void)
 
         if ( GPIO_PIN_4 != GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_4) )
         {
+            UARTprintf("\r\nHibernate now ...");
+
             GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_5, GPIO_PIN_5);  // IND2 LED On
             SysCtlDelay(SysCtlClockGet()/3/10);                     // Delay 0.1 second
             GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_5, 0);           // IND2 LED Off
@@ -196,14 +201,19 @@ int main(void)
             SysCtlDelay(SysCtlClockGet()/3/10);                     // Delay 0.1 second
             GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_5, 0);           // IND2 LED Off
 
-            uint32_t ui32RTCTime;
-            ui32RTCTime = HibernateRTCGet();
+            g_bAwakeFlag = 0;
+        }
 
-            SysCtlDelay(SysCtlClockGet()/3/50); // Delay 2 ms
-            UARTprintf("\r\n%d seconds",ui32RTCTime);
+        if ( 0 == g_bAwakeFlag )
+        {
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, GPIO_PIN_4);  // IND2 LED On
+            SysCtlDelay(SysCtlClockGet()/3/10);                     // Delay 0.1 second
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, 0);           // IND2 LED Off
+
+            UARTprintf("\r\n%d seconds",HibernateRTCGet());
             SysCtlDelay(SysCtlClockGet()/3/50); // Delay 2 ms
 
-            HibernateRTCMatchSet(0,ui32RTCTime+HIBERNATE_WAKE_DELAY);
+            HibernateRTCMatchSet(0,HibernateRTCGet()+HIBERNATE_WAKE_DELAY);
             HibernateRequest();
         }
     }
