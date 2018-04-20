@@ -21,16 +21,15 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "utils/ustdlib.h"
-#include "inc/hw_types.h"
+#include "utils/uartstdio.h"
 #include "inc/hw_ints.h"
 #include "inc/hw_memmap.h"
-#include "driverlib/sysctl.h"
-#include "driverlib/pin_map.h"
-#include "driverlib/debug.h"
-#include "driverlib/hibernate.h"
+#include "inc/hw_types.h"
 #include "driverlib/gpio.h"
+#include "driverlib/hibernate.h"
 #include "driverlib/interrupt.h"
-#include "utils/uartstdio.h"
+#include "driverlib/pin_map.h"
+#include "driverlib/sysctl.h"
 
 #define UART_SPEED              115200
 #define HIBERNATE_WAKE_DELAY    5
