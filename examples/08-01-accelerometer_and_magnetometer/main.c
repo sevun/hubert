@@ -21,6 +21,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "utils/uartstdio.h"
+#include "inc/hw_gpio.h"
 #include "inc/hw_i2c.h"
 #include "inc/hw_ints.h"
 #include "inc/hw_memmap.h"
@@ -61,6 +62,30 @@ void Timer0IntHandler(void)
     g_bTimer0Flag = 1;      // Set the flag for Timer 0 interrupt
 }
 
+//*****************************************************************************
+//! Indicates whether or not the I2C bus has timed out.
+//!
+//! \param ui32Base is the base address of the I2C module.
+//!
+//! This function returns an indication of whether or not the I2C bus has time
+//!  out.  The I2C Master Timeout Value must be set.
+//!
+//! \return Returns \b true if the I2C bus has timed out; otherwise, returns
+//! \b false.
+//*****************************************************************************
+bool I2CMasterTimeout(uint32_t ui32Base)
+{
+    // Return the bus timeout status
+    if(HWREG(ui32Base + I2C_O_MCS) & I2C_MCS_CLKTO)
+    {
+        return(true);
+    }
+    else
+    {
+       return(false);
+    }
+}
+
 int main(void)
 {
     // Set microcontroller to use the 16 MHz external crystal
@@ -91,6 +116,26 @@ int main(void)
 
     // Initialize the UART0 using uartstdio
     UARTStdioConfig(0, UART_SPEED, SysCtlClockGet());
+
+    //*****************************************************************************
+    // I2C Setup
+    //*****************************************************************************
+
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
+
+    // Configure the GPIO Pin Mux for PB2 for I2C0SCL
+    GPIOPinConfigure(GPIO_PB2_I2C0SCL);
+    GPIOPinTypeI2CSCL(GPIO_PORTB_BASE, GPIO_PIN_2);
+
+    // Configure the GPIO Pin Mux for PB3 for I2C0SDA
+    GPIOPinConfigure(GPIO_PB3_I2C0SDA);
+    GPIOPinTypeI2C(GPIO_PORTB_BASE, GPIO_PIN_3);
+
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_I2C0);
+
+    // Set the clock speed for the I2C0 bus
+    I2CMasterInitExpClk(I2C0_BASE, SysCtlClockGet(), false);
+//    I2CMasterTimeoutSet(I2C0_BASE,  0xFF);
 
     //*****************************************************************************
     // Timer Setup
@@ -142,6 +187,34 @@ int main(void)
                 // Writes HIGH to pins
                 GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, GPIO_PIN_4);  // IND1 LED On
             }
+
+            //specify that we are writing (a register address) to the
+            //slave device
+            I2CMasterSlaveAddrSet(I2C0_BASE, FXOS8700CQ_SLAVE_ADDR, false);
+
+            //specify register to be read
+            I2CMasterDataPut(I2C0_BASE, FXOS8700CQ_WHOAMI);
+
+            //send control byte and register address byte to slave device
+            I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_BURST_SEND_START);
+
+            //wait for MCU to finish transaction
+            while(I2CMasterBusy(I2C0_BASE));
+
+            //specify that we are going to read from slave device
+                I2CMasterSlaveAddrSet(I2C0_BASE, FXOS8700CQ_SLAVE_ADDR, true);
+
+            //send control byte and read from the register we
+            //specified
+            I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_SINGLE_RECEIVE);
+
+            //wait for MCU to finish transaction
+            while(I2CMasterBusy(I2C0_BASE));
+
+            //return data pulled from the specified register
+            uint8_t ui8Data =  I2CMasterDataGet(I2C0_BASE);
+
+            UARTprintf("\r\n0x%02X",ui8Data);
         }
     }
 }
