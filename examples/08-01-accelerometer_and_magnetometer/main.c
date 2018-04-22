@@ -1,6 +1,6 @@
 /******************************************************************
  * Hubert Data Logger
- * One Timer Example
+ * Accelerometer and Magnetometer Example
  * Developed by Sevun Scientific, Inc.
  * http://sevunscientific.com
  * *****************************************************************
@@ -20,12 +20,32 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "inc/hw_memmap.h"
+#include "utils/uartstdio.h"
+#include "inc/hw_i2c.h"
 #include "inc/hw_ints.h"
+#include "inc/hw_memmap.h"
+#include "inc/hw_types.h"
+#include "driverlib/gpio.h"
+#include "driverlib/i2c.h"
 #include "driverlib/interrupt.h"
+#include "driverlib/pin_map.h"
 #include "driverlib/sysctl.h"
 #include "driverlib/timer.h"
-#include "driverlib/gpio.h"
+#include "driverlib/uart.h"
+
+#define UART_SPEED                  115200
+
+// FXOS8700CQ I2C address, determined by PCB layout with pins SA0=1, SA1=0
+#define FXOS8700CQ_SLAVE_ADDR       0x1D
+
+// FXOS8700CQ internal register addresses
+#define FXOS8700CQ_STATUS           0x00
+#define FXOS8700CQ_WHOAMI           0x0D
+#define FXOS8700CQ_XYZ_DATA_CFG     0x0E
+#define FXOS8700CQ_CTRL_REG1        0x2A
+#define FXOS8700CQ_M_CTRL_REG1      0x5B
+#define FXOS8700CQ_M_CTRL_REG2      0x5C
+#define FXOS8700CQ_WHOAMI_VAL       0xC7
 
 //*****************************************************************************
 // Timers Interrupt Function
@@ -57,6 +77,22 @@ int main(void)
     GPIOPinTypeGPIOOutput(GPIO_PORTC_BASE, GPIO_PIN_4);
 
     //*****************************************************************************
+    // UART Setup
+    //*****************************************************************************
+
+    // Enable the Port A and UART0 peripheral
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
+
+    // Sets the pins associated with UART0
+    GPIOPinConfigure(GPIO_PA0_U0RX);
+    GPIOPinConfigure(GPIO_PA1_U0TX);
+    GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+
+    // Initialize the UART0 using uartstdio
+    UARTStdioConfig(0, UART_SPEED, SysCtlClockGet());
+
+    //*****************************************************************************
     // Timer Setup
     //*****************************************************************************
 
@@ -84,6 +120,9 @@ int main(void)
     //*****************************************************************************
     // Main Code
     //*****************************************************************************
+
+//    UARTprintf("\033[2;1H");
+    UARTprintf("\r\nIt's alive!!!");
 
     while(1)
     {
