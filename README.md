@@ -14,15 +14,14 @@ They are tailored to match the Hubert hardware.
 1. **GPIO Write** - This just turns on the IND1 and IND2 lights.  These LEDs are there for general use.
 2. **Blinky** - Sets the IND1 and IND2 lights to blink in an alternating pattern using a delay.
 3. **GPIO Read** - Uses the SW1 to turn on the IND2.
-4. **TBD** - TBD
-5. **Timers**
+4. **Timers**
 	1. **One Timer** - A repeating timer which blinks a light on IND1
 	2. **Two Timer** - A repeating timer which blinks a light on IND1 slow and IND2 fast
-6. **UART**
+5. **UART**
 	1. **UART Echo with Polling** - Reads character using polling on UART0 Rx and echoes it to UART0 Tx
 	2. **UART Echo with Interrupts** - Reads character using interrupt on UART0 Rx and echoes it to UART0 Tx
-7. **User Interface** - Uses a timer to update the display and UART receive to change screens
-0. **Hibernate**
+6. **User Interface** - Uses a timer to update the display and UART receive to change screens
+7. **Hibernate**
 	1. **Blink, Hibernate, Repeat** - Use the hibernate module to sleep between blinking IND1
 	2. **Timer Interrupt Hibernate** - Wake from hibernate on timer schedule
 	3. **SW1 Hibernate** - Hibernate when SW1 is pressed for and wake after a set period of time
