@@ -48,6 +48,8 @@
 #define FXOS8700CQ_M_CTRL_REG2      0x5C
 #define FXOS8700CQ_WHOAMI_VAL       0xC7
 
+uint64_t g_ui64Heartbeat;
+
 //*****************************************************************************
 // Timers Interrupt Function
 //*****************************************************************************
@@ -135,7 +137,7 @@ int main(void)
 
     // Set the clock speed for the I2C0 bus
     I2CMasterInitExpClk(I2C0_BASE, SysCtlClockGet(), false);
-//    I2CMasterTimeoutSet(I2C0_BASE,  0xFF);
+    I2CMasterTimeoutSet(I2C0_BASE,  0xFF);
 
     //*****************************************************************************
     // Timer Setup
@@ -166,35 +168,14 @@ int main(void)
     // Main Code
     //*****************************************************************************
 
-    // Clear and reset home screen
-    UARTprintf("\033[2J\033[;H");
-    UARTprintf("It's alive!!!");
-
-    //specify that we are writing (a register address) to the
-    //slave device
-    I2CMasterSlaveAddrSet(I2C0_BASE, FXOS8700CQ_SLAVE_ADDR, false);
-
-    //specify register to be read
-    I2CMasterDataPut(I2C0_BASE, FXOS8700CQ_WHOAMI);
-    I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_BURST_SEND_START);
-    while(I2CMasterBusy(I2C0_BASE));
-
-    //specify that we are going to read from slave device
-    I2CMasterSlaveAddrSet(I2C0_BASE, FXOS8700CQ_SLAVE_ADDR, true);
-    I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_SINGLE_RECEIVE);
-    while(I2CMasterBusy(I2C0_BASE));
-
-    //return data pulled from the specified register
-    uint8_t ui8Data =  I2CMasterDataGet(I2C0_BASE);
-
-    UARTprintf("\r\n0x%02X",ui8Data);
-
     while(1)
     {
         // Timer 0
         if ( 1 == g_bTimer0Flag )
         {
             g_bTimer0Flag = 0;  // Clear the flag for Timer 0 interrupt
+
+            g_ui64Heartbeat++;
 
             // Check the current value of the pin, then flip it
             if ( GPIO_PIN_4 == GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4) )
@@ -207,6 +188,30 @@ int main(void)
                 // Writes HIGH to pins
                 GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, GPIO_PIN_4);  // IND1 LED On
             }
+
+            //specify that we are writing (a register address) to the
+            //slave device
+            I2CMasterSlaveAddrSet(I2C0_BASE, FXOS8700CQ_SLAVE_ADDR, false);
+
+            //specify register to be read
+            I2CMasterDataPut(I2C0_BASE, FXOS8700CQ_WHOAMI);
+            I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_BURST_SEND_START);
+            while(I2CMasterBusy(I2C0_BASE));
+
+            //specify that we are going to read from slave device
+            I2CMasterSlaveAddrSet(I2C0_BASE, FXOS8700CQ_SLAVE_ADDR, true);
+            I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_SINGLE_RECEIVE);
+            while(I2CMasterBusy(I2C0_BASE));
+
+            //return data pulled from the specified register
+            uint8_t ui8Data =  I2CMasterDataGet(I2C0_BASE);
+
+            // Clear and reset home screen
+            UARTprintf("\033[2J\033[;H");
+            UARTprintf("It's alive!!!");
+
+            UARTprintf("\r\n0x%08X",(uint32_t) g_ui64Heartbeat);
+            UARTprintf("\r\n0x%02X",ui8Data);
         }
     }
 }
