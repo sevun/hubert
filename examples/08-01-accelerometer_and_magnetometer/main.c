@@ -166,8 +166,28 @@ int main(void)
     // Main Code
     //*****************************************************************************
 
-//    UARTprintf("\033[2;1H");
-    UARTprintf("\r\nIt's alive!!!");
+    // Clear and reset home screen
+    UARTprintf("\033[2J\033[;H");
+    UARTprintf("It's alive!!!");
+
+    //specify that we are writing (a register address) to the
+    //slave device
+    I2CMasterSlaveAddrSet(I2C0_BASE, FXOS8700CQ_SLAVE_ADDR, false);
+
+    //specify register to be read
+    I2CMasterDataPut(I2C0_BASE, FXOS8700CQ_WHOAMI);
+    I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_BURST_SEND_START);
+    while(I2CMasterBusy(I2C0_BASE));
+
+    //specify that we are going to read from slave device
+    I2CMasterSlaveAddrSet(I2C0_BASE, FXOS8700CQ_SLAVE_ADDR, true);
+    I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_SINGLE_RECEIVE);
+    while(I2CMasterBusy(I2C0_BASE));
+
+    //return data pulled from the specified register
+    uint8_t ui8Data =  I2CMasterDataGet(I2C0_BASE);
+
+    UARTprintf("\r\n0x%02X",ui8Data);
 
     while(1)
     {
@@ -187,34 +207,6 @@ int main(void)
                 // Writes HIGH to pins
                 GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, GPIO_PIN_4);  // IND1 LED On
             }
-
-            //specify that we are writing (a register address) to the
-            //slave device
-            I2CMasterSlaveAddrSet(I2C0_BASE, FXOS8700CQ_SLAVE_ADDR, false);
-
-            //specify register to be read
-            I2CMasterDataPut(I2C0_BASE, FXOS8700CQ_WHOAMI);
-
-            //send control byte and register address byte to slave device
-            I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_BURST_SEND_START);
-
-            //wait for MCU to finish transaction
-            while(I2CMasterBusy(I2C0_BASE));
-
-            //specify that we are going to read from slave device
-                I2CMasterSlaveAddrSet(I2C0_BASE, FXOS8700CQ_SLAVE_ADDR, true);
-
-            //send control byte and read from the register we
-            //specified
-            I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_SINGLE_RECEIVE);
-
-            //wait for MCU to finish transaction
-            while(I2CMasterBusy(I2C0_BASE));
-
-            //return data pulled from the specified register
-            uint8_t ui8Data =  I2CMasterDataGet(I2C0_BASE);
-
-            UARTprintf("\r\n0x%02X",ui8Data);
         }
     }
 }
