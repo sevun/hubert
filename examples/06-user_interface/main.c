@@ -20,22 +20,22 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "inc/hw_memmap.h"
+#include "utils/uartstdio.h"
 #include "inc/hw_ints.h"
+#include "inc/hw_memmap.h"
 #include "driverlib/gpio.h"
 #include "driverlib/interrupt.h"
 #include "driverlib/pin_map.h"
 #include "driverlib/sysctl.h"
 #include "driverlib/timer.h"
 #include "driverlib/uart.h"
-#include "utils/uartstdio.h"
 
 #define UART_SPEED 115200
 
 uint8_t ui8Page;
 
 //*****************************************************************************
-// Timers Interrupt Function
+// Timer Interrupt
 //*****************************************************************************
 volatile bool g_bTimer0Flag = 0;        // Timer 0 occurred flag
 
@@ -49,7 +49,7 @@ void Timer0IntHandler(void)
 }
 
 //*****************************************************************************
-// UART Interrupt Functions
+// UART Interrupt
 //*****************************************************************************
 
 volatile bool g_bKeyboardInputFlag;

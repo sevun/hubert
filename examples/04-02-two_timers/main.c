@@ -20,15 +20,15 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "inc/hw_memmap.h"
 #include "inc/hw_ints.h"
+#include "inc/hw_memmap.h"
+#include "driverlib/gpio.h"
 #include "driverlib/interrupt.h"
 #include "driverlib/sysctl.h"
 #include "driverlib/timer.h"
-#include "driverlib/gpio.h"
 
 //*****************************************************************************
-// Timers Interrupt Function
+// Timer Interrupt Function
 //*****************************************************************************
 volatile bool g_bTimer0Flag = 0;        // Timer 0 occurred flag
 volatile bool g_bTimer1Flag = 0;        // Timer 1 occurred flag
@@ -68,7 +68,7 @@ int main(void)
     GPIOPinTypeGPIOOutput(GPIO_PORTC_BASE, GPIO_PIN_5);
 
     //*****************************************************************************
-    // Timer Setup
+    // Timers Setup
     //*****************************************************************************
 
     // Enable the peripherals used by this example.

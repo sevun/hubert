@@ -23,13 +23,17 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "inc/hw_memmap.h"
-#include "driverlib/sysctl.h"
 #include "driverlib/gpio.h"
+#include "driverlib/sysctl.h"
 
 int main(void)
 {
     // Set microcontroller to use the 16 MHz external crystal
     SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN | SYSCTL_XTAL_16MHZ);
+
+    //*****************************************************************************
+    // Pins Setup
+    //*****************************************************************************
 
     // Enable the Port C and F peripheral
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
@@ -38,6 +42,10 @@ int main(void)
     // Sets the pin associated with IND2 to be output and SW1 to be an input
     GPIOPinTypeGPIOOutput(GPIO_PORTC_BASE, GPIO_PIN_5);
     GPIOPinTypeGPIOInput(GPIO_PORTF_BASE, GPIO_PIN_4);
+
+    //*****************************************************************************
+    // Main Code
+    //*****************************************************************************
 
     // Runs this code repeatedly (called polling)
     while(1)

@@ -18,7 +18,6 @@
  * *****************************************************************
  * https://github.com/mlwarner/fxos8700cq-arduino/blob/master/FXOS8700CQ.cpp
  * https://eewiki.net/display/microcontroller/I2C+Communication+with+the+TI+Tiva+TM4C123GXL
- *
  */
 
 #include <stdint.h>
@@ -54,18 +53,8 @@
 //#define FXOS8700CQ_WHOAMI_VAL       0xC7
 
 //*****************************************************************************
-// Timers Interrupt Function
+// I2C Functions
 //*****************************************************************************
-volatile bool g_bTimer0Flag = 0;        // Timer 0 occurred flag
-
-// The interrupt handler for the first timer interrupt. 1 Hz
-void Timer0IntHandler(void)
-{
-    // Clear the timer interrupt.
-    TimerIntClear(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
-
-    g_bTimer0Flag = 1;      // Set the flag for Timer 0 interrupt
-}
 
 //*****************************************************************************
 //! Indicates whether or not the I2C bus has timed out.
@@ -187,6 +176,22 @@ void I2CSend(uint8_t slave_addr, uint8_t num_of_args, ...)
     }
 }
 
+//*****************************************************************************
+// Timer Interrupt
+//*****************************************************************************
+volatile bool g_bTimer0Flag = 0;        // Timer 0 occurred flag
+
+// The interrupt handler for the first timer interrupt. 1 Hz
+void Timer0IntHandler(void)
+{
+    // Clear the timer interrupt.
+    TimerIntClear(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
+
+    g_bTimer0Flag = 1;      // Set the flag for Timer 0 interrupt
+}
+
+
+
 int main(void)
 {
     // Set microcontroller to use the 16 MHz external crystal
@@ -201,6 +206,24 @@ int main(void)
 
     // Sets the pin associated with iND1 and IND2 to be output
     GPIOPinTypeGPIOOutput(GPIO_PORTC_BASE, GPIO_PIN_4);
+
+    //*****************************************************************************
+    // Timer Setup
+    //*****************************************************************************
+
+    // Enable the peripherals used by this example.
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);
+
+    // Configure the two 32-bit periodic timers.
+    TimerConfigure(TIMER0_BASE, TIMER_CFG_PERIODIC);
+    TimerLoadSet(TIMER0_BASE, TIMER_A, SysCtlClockGet() / 2);      // 2 Hz rate
+
+    // Setup the interrupts for the timer timeouts.
+    IntEnable(INT_TIMER0A);
+    TimerIntEnable(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
+
+    // Enable the timers.
+    TimerEnable(TIMER0_BASE, TIMER_A);
 
     //*****************************************************************************
     // UART Setup
@@ -237,24 +260,6 @@ int main(void)
     // Set the clock speed for the I2C0 bus
     I2CMasterInitExpClk(I2C0_BASE, SysCtlClockGet(), false);
     I2CMasterTimeoutSet(I2C0_BASE,  0xFF);
-
-    //*****************************************************************************
-    // Timer Setup
-    //*****************************************************************************
-
-    // Enable the peripherals used by this example.
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);
-
-    // Configure the two 32-bit periodic timers.
-    TimerConfigure(TIMER0_BASE, TIMER_CFG_PERIODIC);
-    TimerLoadSet(TIMER0_BASE, TIMER_A, SysCtlClockGet() / 2);      // 2 Hz rate
-
-    // Setup the interrupts for the timer timeouts.
-    IntEnable(INT_TIMER0A);
-    TimerIntEnable(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
-
-    // Enable the timers.
-    TimerEnable(TIMER0_BASE, TIMER_A);
 
     //*****************************************************************************
     // Configure Interrupts

@@ -21,14 +21,13 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "utils/ustdlib.h"
-#include "inc/hw_types.h"
-#include "inc/hw_memmap.h"
-#include "driverlib/sysctl.h"
-#include "driverlib/pin_map.h"
-#include "driverlib/debug.h"
-#include "driverlib/hibernate.h"
-#include "driverlib/gpio.h"
 #include "utils/uartstdio.h"
+#include "inc/hw_memmap.h"
+#include "inc/hw_types.h"
+#include "driverlib/gpio.h"
+#include "driverlib/hibernate.h"
+#include "driverlib/pin_map.h"
+#include "driverlib/sysctl.h"
 
 #define UART_SPEED              115200
 #define HIBERNATE_WAKE_DELAY    5
@@ -93,5 +92,5 @@ int main(void)
     HibernateRTCMatchSet(0,HibernateRTCGet()+HIBERNATE_WAKE_DELAY);
     HibernateRequest();
 
-    while(1) {}  // Repeats this section over and over
+    while(1) {}
 }

@@ -35,7 +35,7 @@
 #define HIBERNATE_WAKE_DELAY    5
 
 //*****************************************************************************
-// Hibernate Interrupt Function
+// Hibernate Interrupt
 //*****************************************************************************
 volatile bool g_bRTCMatchFlag;
 volatile bool g_bWakePinFlag;
@@ -119,6 +119,10 @@ int main(void)
         HibernateIntClear(HIBERNATE_INT_RTC_MATCH_0 | HIBERNATE_INT_PIN_WAKE);
         HibernateIntRegister(HibernateHandler);
     }
+
+    //*****************************************************************************
+    // Configure Interrupts
+    //*****************************************************************************
 
     IntEnable(INT_HIBERNATE_TM4C123);
 

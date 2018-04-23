@@ -26,10 +26,16 @@
 #include "driverlib/sysctl.h"
 #include "driverlib/uart.h"
 
+#define UART_SPEED 115200
+
 int main(void)
 {
     // Set microcontroller to use the 16 MHz external crystal
     SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN | SYSCTL_XTAL_16MHZ);
+
+    //*****************************************************************************
+    // Pins Setup
+    //*****************************************************************************
 
     // Enable the Port A and UART0 peripheral
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
@@ -40,13 +46,20 @@ int main(void)
     GPIOPinConfigure(GPIO_PA1_U0TX);
     GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
 
+    //*****************************************************************************
+    // UART Setup
+    //*****************************************************************************
+
     // Configure the UART for 115,200, 8-N-1 operation.
-    UARTConfigSetExpClk(UART0_BASE, SysCtlClockGet(), 115200,
+    UARTConfigSetExpClk(UART0_BASE, SysCtlClockGet(), UART_SPEED,
                             (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE |
                              UART_CONFIG_PAR_NONE));
 
-    // Runs this code repeatedly (called polling)
-    while(1)
+    //*****************************************************************************
+    // Main Code
+    //*****************************************************************************
+
+    while(1) // Runs this code repeatedly (called polling)
     {
         // Check to see if there is an incoming character on the UART0 Rx
         if ( UARTCharsAvail(UART0_BASE) )

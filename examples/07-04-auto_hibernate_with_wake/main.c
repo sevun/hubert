@@ -36,7 +36,7 @@
 #define HIBERNATE_WAKE_DELAY    5
 
 //*****************************************************************************
-// Hibernate Interrupt Function
+// Hibernate Interrupt
 //*****************************************************************************
 volatile bool g_bAwakeFlag;
 
@@ -64,7 +64,7 @@ void HibernateHandler(void)
 }
 
 //*****************************************************************************
-// Timers Interrupt Function
+// Timer Interrupt
 //*****************************************************************************
 volatile bool g_bTimer0Flag = 0;        // Timer 0 occurred flag
 
@@ -96,6 +96,24 @@ int main(void)
     // Sets the pin associated with IND1 and IND2 to be output
     GPIOPinTypeGPIOOutput(GPIO_PORTC_BASE, GPIO_PIN_4);
     GPIOPinTypeGPIOOutput(GPIO_PORTC_BASE, GPIO_PIN_5);
+
+    //*****************************************************************************
+    // Timer Setup
+    //*****************************************************************************
+
+    // Enable the peripherals used by this example.
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);
+
+    // Configure the two 32-bit periodic timers.
+    TimerConfigure(TIMER0_BASE, TIMER_CFG_PERIODIC);
+    TimerLoadSet(TIMER0_BASE, TIMER_A, SysCtlClockGet() / 2);      // 2 Hz rate
+
+    // Setup the interrupts for the timer timeouts.
+    IntEnable(INT_TIMER0A);
+    TimerIntEnable(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
+
+    // Enable the timers.
+    TimerEnable(TIMER0_BASE, TIMER_A);
 
     //*****************************************************************************
     // UART Setup
@@ -138,29 +156,11 @@ int main(void)
         HibernateIntRegister(HibernateHandler);
     }
 
-    IntEnable(INT_HIBERNATE_TM4C123);
-
-    //*****************************************************************************
-    // Timer Setup
-    //*****************************************************************************
-
-    // Enable the peripherals used by this example.
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);
-
-    // Configure the two 32-bit periodic timers.
-    TimerConfigure(TIMER0_BASE, TIMER_CFG_PERIODIC);
-    TimerLoadSet(TIMER0_BASE, TIMER_A, SysCtlClockGet() / 2);      // 2 Hz rate
-
-    // Setup the interrupts for the timer timeouts.
-    IntEnable(INT_TIMER0A);
-    TimerIntEnable(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
-
-    // Enable the timers.
-    TimerEnable(TIMER0_BASE, TIMER_A);
-
     //*****************************************************************************
     // Configure Interrupts
     //*****************************************************************************
+
+    IntEnable(INT_HIBERNATE_TM4C123);
 
     // Enable processor interrupts.
     IntMasterEnable();

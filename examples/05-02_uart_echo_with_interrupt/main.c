@@ -31,7 +31,7 @@
 #define UART_SPEED 115200
 
 //*****************************************************************************
-// UART Interrupt Functions
+// UART Interrupt
 //*****************************************************************************
 
 volatile bool g_bKeyboardInputFlag;
@@ -69,6 +69,7 @@ int main(void)
     //*****************************************************************************
     // UART Setup
     //*****************************************************************************
+
     UARTConfigSetExpClk(UART0_BASE, SysCtlClockGet(), UART_SPEED,
         (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE | UART_CONFIG_PAR_NONE));
 
