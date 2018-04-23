@@ -56,30 +56,6 @@
 // I2C Functions
 //*****************************************************************************
 
-//*****************************************************************************
-//! Indicates whether or not the I2C bus has timed out.
-//!
-//! \param ui32Base is the base address of the I2C module.
-//!
-//! This function returns an indication of whether or not the I2C bus has time
-//!  out.  The I2C Master Timeout Value must be set.
-//!
-//! \return Returns \b true if the I2C bus has timed out; otherwise, returns
-//! \b false.
-//*****************************************************************************
-bool I2CMasterTimeout(uint32_t ui32Base)
-{
-    // Return the bus timeout status
-    if(HWREG(ui32Base + I2C_O_MCS) & I2C_MCS_CLKTO)
-    {
-        return(true);
-    }
-    else
-    {
-       return(false);
-    }
-}
-
 uint32_t I2CReceive(uint32_t slave_addr, uint8_t reg)
 {
     //specify that we are writing (a register address) to the
@@ -202,10 +178,27 @@ int main(void)
     //*****************************************************************************
 
     // Enable the Port C peripheral
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_I2C0);
 
-    // Sets the pin associated with iND1 and IND2 to be output
+    // Sets the pin associated with IND1 output
     GPIOPinTypeGPIOOutput(GPIO_PORTC_BASE, GPIO_PIN_4);
+
+    // Sets the pins associated with UART0
+    GPIOPinConfigure(GPIO_PA0_U0RX);
+    GPIOPinConfigure(GPIO_PA1_U0TX);
+    GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+
+    // Configure the GPIO Pin Mux for PB2 for I2C0SCL
+    GPIOPinConfigure(GPIO_PB2_I2C0SCL);
+    GPIOPinTypeI2CSCL(GPIO_PORTB_BASE, GPIO_PIN_2);
+
+    // Configure the GPIO Pin Mux for PB3 for I2C0SDA
+    GPIOPinConfigure(GPIO_PB3_I2C0SDA);
+    GPIOPinTypeI2C(GPIO_PORTB_BASE, GPIO_PIN_3);
 
     //*****************************************************************************
     // Timer Setup
@@ -229,15 +222,6 @@ int main(void)
     // UART Setup
     //*****************************************************************************
 
-    // Enable the Port A and UART0 peripheral
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
-
-    // Sets the pins associated with UART0
-    GPIOPinConfigure(GPIO_PA0_U0RX);
-    GPIOPinConfigure(GPIO_PA1_U0TX);
-    GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
-
     // Initialize the UART0 using uartstdio
     UARTStdioConfig(0, UART_SPEED, SysCtlClockGet());
 
@@ -245,21 +229,8 @@ int main(void)
     // I2C Setup
     //*****************************************************************************
 
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
-
-    // Configure the GPIO Pin Mux for PB2 for I2C0SCL
-    GPIOPinConfigure(GPIO_PB2_I2C0SCL);
-    GPIOPinTypeI2CSCL(GPIO_PORTB_BASE, GPIO_PIN_2);
-
-    // Configure the GPIO Pin Mux for PB3 for I2C0SDA
-    GPIOPinConfigure(GPIO_PB3_I2C0SDA);
-    GPIOPinTypeI2C(GPIO_PORTB_BASE, GPIO_PIN_3);
-
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_I2C0);
-
     // Set the clock speed for the I2C0 bus
     I2CMasterInitExpClk(I2C0_BASE, SysCtlClockGet(), false);
-    I2CMasterTimeoutSet(I2C0_BASE,  0xFF);
 
     //*****************************************************************************
     // Configure Interrupts

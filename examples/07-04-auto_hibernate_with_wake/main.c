@@ -87,8 +87,10 @@ int main(void)
     //*****************************************************************************
 
     // Enable the Port peripherals
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
 
     // Sets the pin associated with SW1 to be an input
     GPIOPinTypeGPIOInput(GPIO_PORTF_BASE, GPIO_PIN_4);
@@ -96,6 +98,11 @@ int main(void)
     // Sets the pin associated with IND1 and IND2 to be output
     GPIOPinTypeGPIOOutput(GPIO_PORTC_BASE, GPIO_PIN_4);
     GPIOPinTypeGPIOOutput(GPIO_PORTC_BASE, GPIO_PIN_5);
+
+    // Sets the pins associated with UART0
+    GPIOPinConfigure(GPIO_PA0_U0RX);
+    GPIOPinConfigure(GPIO_PA1_U0TX);
+    GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
 
     //*****************************************************************************
     // Timer Setup
@@ -118,16 +125,7 @@ int main(void)
     //*****************************************************************************
     // UART Setup
     //*****************************************************************************
-
-    // Enable the Port A and UART0 peripheral
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
-
-    // Sets the pins associated with UART0
-    GPIOPinConfigure(GPIO_PA0_U0RX);
-    GPIOPinConfigure(GPIO_PA1_U0TX);
-    GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
-
+    
     // Initialize the UART0 using uartstdio
     UARTStdioConfig(0, UART_SPEED, SysCtlClockGet());
 
