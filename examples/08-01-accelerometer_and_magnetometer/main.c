@@ -16,10 +16,14 @@
  *            ___\///////////_______\///////////_____\///////////__
  *
  * *****************************************************************
+ * https://github.com/mlwarner/fxos8700cq-arduino/blob/master/FXOS8700CQ.cpp
+ * https://eewiki.net/display/microcontroller/I2C+Communication+with+the+TI+Tiva+TM4C123GXL
+ *
  */
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include "utils/uartstdio.h"
 #include "inc/hw_gpio.h"
 #include "inc/hw_i2c.h"
@@ -40,15 +44,14 @@
 #define FXOS8700CQ_SLAVE_ADDR       0x1D
 
 // FXOS8700CQ internal register addresses
-#define FXOS8700CQ_STATUS           0x00
+//#define FXOS8700CQ_STATUS           0x00
 #define FXOS8700CQ_WHOAMI           0x0D
-#define FXOS8700CQ_XYZ_DATA_CFG     0x0E
+//#define FXOS8700CQ_XYZ_DATA_CFG     0x0E
 #define FXOS8700CQ_CTRL_REG1        0x2A
-#define FXOS8700CQ_M_CTRL_REG1      0x5B
-#define FXOS8700CQ_M_CTRL_REG2      0x5C
-#define FXOS8700CQ_WHOAMI_VAL       0xC7
-
-uint64_t g_ui64Heartbeat;
+//#define FXOS8700CQ_CTRL_REG2        0x2B
+//#define FXOS8700CQ_M_CTRL_REG1      0x5B
+//#define FXOS8700CQ_M_CTRL_REG2      0x5C
+//#define FXOS8700CQ_WHOAMI_VAL       0xC7
 
 //*****************************************************************************
 // Timers Interrupt Function
@@ -85,6 +88,102 @@ bool I2CMasterTimeout(uint32_t ui32Base)
     else
     {
        return(false);
+    }
+}
+
+uint32_t I2CReceive(uint32_t slave_addr, uint8_t reg)
+{
+    //specify that we are writing (a register address) to the
+    //slave device
+    I2CMasterSlaveAddrSet(I2C0_BASE, slave_addr, false);
+
+    //specify register to be read
+    I2CMasterDataPut(I2C0_BASE, reg);
+
+    //send control byte and register address byte to slave device
+    I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_BURST_SEND_START);
+
+    //wait for MCU to finish transaction
+    while(I2CMasterBusy(I2C0_BASE));
+
+    //specify that we are going to read from slave device
+    I2CMasterSlaveAddrSet(I2C0_BASE, slave_addr, true);
+
+    //send control byte and read from the register we
+    //specified
+    I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_SINGLE_RECEIVE);
+
+    //wait for MCU to finish transaction
+    while(I2CMasterBusy(I2C0_BASE));
+
+    //return data pulled from the specified register
+    return I2CMasterDataGet(I2C0_BASE);
+}
+
+//sends an I2C command to the specified slave
+void I2CSend(uint8_t slave_addr, uint8_t num_of_args, ...)
+{
+    // Tell the master module what address it will place on the bus when
+    // communicating with the slave.
+    I2CMasterSlaveAddrSet(I2C0_BASE, slave_addr, false);
+
+    //stores list of variable number of arguments
+    va_list vargs;
+
+    //specifies the va_list to "open" and the last fixed argument
+    //so vargs knows where to start looking
+    va_start(vargs, num_of_args);
+
+    //put data to be sent into FIFO
+    I2CMasterDataPut(I2C0_BASE, va_arg(vargs, uint32_t));
+
+    //if there is only one argument, we only need to use the
+    //single send I2C function
+    if(num_of_args == 1)
+    {
+        //Initiate send of data from the MCU
+        I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_SINGLE_SEND);
+
+        // Wait until MCU is done transferring.
+        while(I2CMasterBusy(I2C0_BASE));
+
+        //"close" variable argument list
+        va_end(vargs);
+    }
+
+    //otherwise, we start transmission of multiple bytes on the
+    //I2C bus
+    else
+    {
+        //Initiate send of data from the MCU
+        I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_BURST_SEND_START);
+
+        // Wait until MCU is done transferring.
+        while(I2CMasterBusy(I2C0_BASE));
+
+        //send num_of_args-2 pieces of data, using the
+        //BURST_SEND_CONT command of the I2C module
+        uint8_t i;
+        for(i = 1; i < (num_of_args - 1); i++)
+        {
+            //put next piece of data into I2C FIFO
+            I2CMasterDataPut(I2C0_BASE, va_arg(vargs, uint32_t));
+            //send next data that was just placed into FIFO
+            I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_BURST_SEND_CONT);
+
+            // Wait until MCU is done transferring.
+            while(I2CMasterBusy(I2C0_BASE));
+        }
+
+        //put last piece of data into I2C FIFO
+        I2CMasterDataPut(I2C0_BASE, va_arg(vargs, uint32_t));
+        //send next data that was just placed into FIFO
+        I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_BURST_SEND_FINISH);
+        // Wait until MCU is done transferring.
+        while(I2CMasterBusy(I2C0_BASE));
+
+        //"close" variable args list
+        va_end(vargs);
     }
 }
 
@@ -168,14 +267,33 @@ int main(void)
     // Main Code
     //*****************************************************************************
 
+    uint32_t ui32Data;
+
+    // Clear and reset home screen
+    UARTprintf("\033[2J\033[;H");
+    UARTprintf("It's alive!!!");
+
+    // Get WHO_AM_I register, return should be 0xC7
+    ui32Data = I2CReceive(FXOS8700CQ_SLAVE_ADDR, FXOS8700CQ_WHOAMI);
+    UARTprintf("\r\n0x%02X 0x%04X",FXOS8700CQ_WHOAMI,ui32Data);
+
+    // Get CTRL_REG1 register
+    ui32Data = I2CReceive(FXOS8700CQ_SLAVE_ADDR, FXOS8700CQ_CTRL_REG1);
+    UARTprintf("\r\n0x%02X 0x%04X",FXOS8700CQ_CTRL_REG1,ui32Data);
+
+    uint8_t ui8Data = (uint8_t) ui32Data;
+    I2CSend(FXOS8700CQ_SLAVE_ADDR, 2, FXOS8700CQ_CTRL_REG1,ui8Data | 0x01);
+
+    // Get CTRL_REG1 register
+    ui32Data = I2CReceive(FXOS8700CQ_SLAVE_ADDR, FXOS8700CQ_CTRL_REG1);
+    UARTprintf("\r\n0x%02X 0x%04X",FXOS8700CQ_CTRL_REG1,ui32Data);
+
     while(1)
     {
         // Timer 0
         if ( 1 == g_bTimer0Flag )
         {
             g_bTimer0Flag = 0;  // Clear the flag for Timer 0 interrupt
-
-            g_ui64Heartbeat++;
 
             // Check the current value of the pin, then flip it
             if ( GPIO_PIN_4 == GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4) )
@@ -189,29 +307,9 @@ int main(void)
                 GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, GPIO_PIN_4);  // IND1 LED On
             }
 
-            //specify that we are writing (a register address) to the
-            //slave device
-            I2CMasterSlaveAddrSet(I2C0_BASE, FXOS8700CQ_SLAVE_ADDR, false);
-
-            //specify register to be read
-            I2CMasterDataPut(I2C0_BASE, FXOS8700CQ_WHOAMI);
-            I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_BURST_SEND_START);
-            while(I2CMasterBusy(I2C0_BASE));
-
-            //specify that we are going to read from slave device
-            I2CMasterSlaveAddrSet(I2C0_BASE, FXOS8700CQ_SLAVE_ADDR, true);
-            I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_SINGLE_RECEIVE);
-            while(I2CMasterBusy(I2C0_BASE));
-
-            //return data pulled from the specified register
-            uint8_t ui8Data =  I2CMasterDataGet(I2C0_BASE);
-
-            // Clear and reset home screen
-            UARTprintf("\033[2J\033[;H");
-            UARTprintf("It's alive!!!");
-
-            UARTprintf("\r\n0x%08X",(uint32_t) g_ui64Heartbeat);
-            UARTprintf("\r\n0x%02X",ui8Data);
+            // Get CTRL_REG1 register
+            ui32Data = I2CReceive(FXOS8700CQ_SLAVE_ADDR, 0x0001);
+            UARTprintf("\r\n0x%02X %d",0x0001,ui32Data);
         }
     }
 }
