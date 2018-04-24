@@ -56,41 +56,41 @@
 // I2C Functions
 //*****************************************************************************
 
-uint32_t I2CReceive(uint32_t slave_addr, uint8_t reg)
+uint32_t I2CReceive(uint32_t ui32Base, uint32_t ui32SlaveAddress, uint8_t ui32SlaveRegister)
 {
     //specify that we are writing (a register address) to the
     //slave device
-    I2CMasterSlaveAddrSet(I2C0_BASE, slave_addr, false);
+    I2CMasterSlaveAddrSet(ui32Base, ui32SlaveAddress, false);
 
     //specify register to be read
-    I2CMasterDataPut(I2C0_BASE, reg);
+    I2CMasterDataPut(ui32Base, ui32SlaveRegister);
 
     //send control byte and register address byte to slave device
-    I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_BURST_SEND_START);
+    I2CMasterControl(ui32Base, I2C_MASTER_CMD_BURST_SEND_START);
 
     //wait for MCU to finish transaction
-    while(I2CMasterBusy(I2C0_BASE));
+    while(I2CMasterBusy(ui32Base));
 
     //specify that we are going to read from slave device
-    I2CMasterSlaveAddrSet(I2C0_BASE, slave_addr, true);
+    I2CMasterSlaveAddrSet(ui32Base, ui32SlaveAddress, true);
 
     //send control byte and read from the register we
     //specified
-    I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_SINGLE_RECEIVE);
+    I2CMasterControl(ui32Base, I2C_MASTER_CMD_SINGLE_RECEIVE);
 
     //wait for MCU to finish transaction
-    while(I2CMasterBusy(I2C0_BASE));
+    while(I2CMasterBusy(ui32Base));
 
     //return data pulled from the specified register
-    return I2CMasterDataGet(I2C0_BASE);
+    return I2CMasterDataGet(ui32Base);
 }
 
 //sends an I2C command to the specified slave
-void I2CSend(uint8_t slave_addr, uint8_t num_of_args, ...)
+void I2CSend(uint8_t ui32SlaveAddress, uint8_t num_of_args, ...)
 {
     // Tell the master module what address it will place on the bus when
     // communicating with the slave.
-    I2CMasterSlaveAddrSet(I2C0_BASE, slave_addr, false);
+    I2CMasterSlaveAddrSet(I2C0_BASE, ui32SlaveAddress, false);
 
     //stores list of variable number of arguments
     va_list vargs;
@@ -165,8 +165,6 @@ void Timer0IntHandler(void)
 
     g_bTimer0Flag = 1;      // Set the flag for Timer 0 interrupt
 }
-
-
 
 int main(void)
 {
@@ -250,18 +248,18 @@ int main(void)
     UARTprintf("It's alive!!!");
 
     // Get WHO_AM_I register, return should be 0xC7
-    ui32Data = I2CReceive(FXOS8700CQ_SLAVE_ADDR, FXOS8700CQ_WHOAMI);
+    ui32Data = I2CReceive(I2C0_BASE,FXOS8700CQ_SLAVE_ADDR, FXOS8700CQ_WHOAMI);
     UARTprintf("\r\n0x%02X 0x%04X",FXOS8700CQ_WHOAMI,ui32Data);
 
     // Get CTRL_REG1 register
-    ui32Data = I2CReceive(FXOS8700CQ_SLAVE_ADDR, FXOS8700CQ_CTRL_REG1);
+    ui32Data = I2CReceive(I2C0_BASE,FXOS8700CQ_SLAVE_ADDR, FXOS8700CQ_CTRL_REG1);
     UARTprintf("\r\n0x%02X 0x%04X",FXOS8700CQ_CTRL_REG1,ui32Data);
 
     uint8_t ui8Data = (uint8_t) ui32Data;
     I2CSend(FXOS8700CQ_SLAVE_ADDR, 2, FXOS8700CQ_CTRL_REG1,ui8Data | 0x01);
 
     // Get CTRL_REG1 register
-    ui32Data = I2CReceive(FXOS8700CQ_SLAVE_ADDR, FXOS8700CQ_CTRL_REG1);
+    ui32Data = I2CReceive(I2C0_BASE,FXOS8700CQ_SLAVE_ADDR, FXOS8700CQ_CTRL_REG1);
     UARTprintf("\r\n0x%02X 0x%04X",FXOS8700CQ_CTRL_REG1,ui32Data);
 
     while(1)
@@ -284,7 +282,7 @@ int main(void)
             }
 
             // Get CTRL_REG1 register
-            ui32Data = I2CReceive(FXOS8700CQ_SLAVE_ADDR, 0x0001);
+            ui32Data = I2CReceive(I2C0_BASE,FXOS8700CQ_SLAVE_ADDR, 0x0001);
             UARTprintf("\r\n0x%02X %d",0x0001,ui32Data);
         }
     }
