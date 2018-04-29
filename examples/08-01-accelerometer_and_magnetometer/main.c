@@ -35,7 +35,7 @@
 #include "driverlib/sysctl.h"
 #include "driverlib/timer.h"
 #include "driverlib/uart.h"
-#include "peripherals.h"
+#include "fxos8700cq.h"
 
 #define UART_SPEED                  115200
 

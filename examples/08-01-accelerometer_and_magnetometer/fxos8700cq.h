@@ -1,12 +1,12 @@
 /*
- * peripherals.h
+ * fxos8700cq.h
  *
  *  Created on: Apr 23, 2018
  *      Author: brandon.dixon
  */
 
-#ifndef PERIPHERALS_H_
-#define PERIPHERALS_H_
+#ifndef FXOS8700CQ_H_
+#define FXOS8700CQ_H_
 
 // FXOS8700CQ I2C address, determined by PCB layout with pins SA0=1, SA1=0
 #define FXOS8700CQ_SLAVE_ADDR       0x1D
@@ -165,4 +165,4 @@ extern void FXOS8700CQActive(void);
 extern void FXOS8700CQAccelRange(tAccelRange tAFSR);
 extern void FXOS8700CQOutputDataRate(tOutputDataRate tODR);
 
-#endif /* PERIPHERALS_H_ */
+#endif /* FXOS8700CQ_H_ */

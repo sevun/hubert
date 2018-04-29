@@ -11,7 +11,7 @@
 #include "inc/hw_i2c.h"
 #include "driverlib/i2c.h"
 #include "inc/hw_memmap.h"
-#include "peripherals.h"
+#include "fxos8700cq.h"
 
 uint32_t I2CReceive(uint32_t ui32Base, uint32_t ui32SlaveAddress, uint8_t ui32SlaveRegister)
 {
