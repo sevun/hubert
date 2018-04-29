@@ -37,7 +37,11 @@
 #include "driverlib/uart.h"
 #include "ag/fxos8700cq.h"
 
+// Define UART speed in kbs
 #define UART_SPEED                  115200
+
+// Define FXOS8700CQ I2C address, determined by PCB layout with pins SA0=1, SA1=0
+#define AG_SLAVE_ADDR       0x1D
 
 //*****************************************************************************
 // I2C Functions
@@ -123,14 +127,6 @@ int main(void)
     // Set the clock speed for the I2C0 bus
     I2CMasterInitExpClk(I2C0_BASE, SysCtlClockGet(), false);
 
-
-    //*****************************************************************************
-    // Accelerometer and Gravitometer
-    //*****************************************************************************
-
-    // FXOS8700CQ I2C address, determined by PCB layout with pins SA0=1, SA1=0
-    #define AG_SLAVE_ADDR       0x1D
-
     //*****************************************************************************
     // Configure Interrupts
     //*****************************************************************************
@@ -149,7 +145,7 @@ int main(void)
     UARTprintf("Hubert is stirring");
 
     // Get WHO_AM_I register, return should be 0xC7
-    ui32Data =I2CAGReceive(I2C0_BASE,AG_SLAVE_ADDR, AG_WHO_AM_I);
+    ui32Data =I2CAGReceive(AG_SLAVE_ADDR, AG_WHO_AM_I);
     if ( 0xC7 == ui32Data )
     {
         UARTprintf("\r\n... FXOS8700CQ is alive!!!");
@@ -160,24 +156,24 @@ int main(void)
     }
 
     // Put the device into standby before changing register values
-    AGStandby(I2C0_BASE,AG_SLAVE_ADDR);
+    AGStandby(AG_SLAVE_ADDR);
 
     // Choose the range of the accelerometer (±2G,±4G,±8G)
-    AGAccelRange(I2C0_BASE,AG_SLAVE_ADDR,AFSR_2G);
+    AGAccelRange(AG_SLAVE_ADDR, AFSR_2G);
 
     // Choose the output data rate (800 Hz, 400 Hz, 200 Hz, 100 Hz,
     //  50 Hz, 12.5 Hz, 6.25 Hz, 1.56 Hz). Rate is cut in half when
     //  running in hybrid mode (accelerometer and magnetometer active)
-    AGOutputDataRate(I2C0_BASE,AG_SLAVE_ADDR,ODR_1_56HZ);
+    AGOutputDataRate(AG_SLAVE_ADDR, ODR_1_56HZ);
 
     // Activate the data device
-    AGActive(I2C0_BASE,AG_SLAVE_ADDR);
+    AGActive(AG_SLAVE_ADDR);
 
     // ***********************Print register values for testing feedback
-    ui32Data = I2CAGReceive(I2C0_BASE,AG_SLAVE_ADDR, AG_CTRL_REG1);
+    ui32Data = I2CAGReceive(AG_SLAVE_ADDR, AG_CTRL_REG1);
     UARTprintf("\r\n0x%02X 0x%02x",AG_CTRL_REG1,ui32Data);
 
-    ui32Data = I2CAGReceive(I2C0_BASE,AG_SLAVE_ADDR, AG_XYZ_DATA_CFG);
+    ui32Data = I2CAGReceive(AG_SLAVE_ADDR, AG_XYZ_DATA_CFG);
     UARTprintf("\r\n0x%02X 0x%02x",AG_XYZ_DATA_CFG,ui32Data);
 
 
