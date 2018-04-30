@@ -138,11 +138,11 @@ int main(void)
     // Main Code
     //*****************************************************************************
 
-    uint32_t ui32Data;
-
     // Clear and reset home screen
     UARTprintf("\033[2J\033[;H");
     UARTprintf("Hubert is stirring");
+
+    uint32_t ui32Data;
 
     // Get WHO_AM_I register, return should be 0xC7
     ui32Data =I2CAGReceive(AG_SLAVE_ADDR, AG_WHO_AM_I);
@@ -155,6 +155,17 @@ int main(void)
         UARTprintf("\r\n... FXOS8700CQ is NOT alive.");
     }
 
+    // ***********************Print register values for testing feedback
+    ui32Data = I2CAGReceive(AG_SLAVE_ADDR, AG_CTRL_REG1);
+    UARTprintf("\r\n0x%02X 0x%02x",AG_CTRL_REG1,ui32Data);
+
+    ui32Data = I2CAGReceive(AG_SLAVE_ADDR, AG_XYZ_DATA_CFG);
+    UARTprintf("\r\n0x%02X 0x%02x",AG_XYZ_DATA_CFG,ui32Data);
+
+    ui32Data = I2CAGReceive(AG_SLAVE_ADDR, AG_M_CTRL_REG1);
+    UARTprintf("\r\n0x%02X 0x%02x",AG_M_CTRL_REG1,ui32Data);
+    // ***********************Print register values for testing feedback
+
     // Put the device into standby before changing register values
     AGStandby(AG_SLAVE_ADDR);
 
@@ -166,6 +177,8 @@ int main(void)
     //  running in hybrid mode (accelerometer and magnetometer active)
     AGOutputDataRate(AG_SLAVE_ADDR, ODR_1_56HZ);
 
+    AGHybridMode(AG_SLAVE_ADDR, ACCEL_AND_MAG);
+
     // Activate the data device
     AGActive(AG_SLAVE_ADDR);
 
@@ -175,6 +188,10 @@ int main(void)
 
     ui32Data = I2CAGReceive(AG_SLAVE_ADDR, AG_XYZ_DATA_CFG);
     UARTprintf("\r\n0x%02X 0x%02x",AG_XYZ_DATA_CFG,ui32Data);
+
+    ui32Data = I2CAGReceive(AG_SLAVE_ADDR, AG_M_CTRL_REG1);
+    UARTprintf("\r\n0x%02X 0x%02x",AG_M_CTRL_REG1,ui32Data);
+    // ***********************Print register values for testing feedback
 
 
     while(1)
