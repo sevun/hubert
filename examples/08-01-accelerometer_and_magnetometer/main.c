@@ -43,6 +43,8 @@
 // Define FXOS8700CQ I2C address, determined by PCB layout with pins SA0=1, SA1=0
 #define AG_SLAVE_ADDR       0x1D
 
+uint8_t ui8Register[13];  // FIXME temp variable for verifying receve dump
+
 //*****************************************************************************
 // I2C Functions
 //*****************************************************************************
@@ -142,11 +144,11 @@ int main(void)
     UARTprintf("\033[2J\033[;H");
     UARTprintf("Hubert is stirring");
 
-    uint32_t ui32Data;
+    uint8_t ui32DataXXX[1];
 
     // Get WHO_AM_I register, return should be 0xC7
-    ui32Data =I2CAGReceive(AG_SLAVE_ADDR, AG_WHO_AM_I);
-    if ( 0xC7 == ui32Data )
+    I2AGReceive(AG_SLAVE_ADDR, AG_WHO_AM_I, ui32DataXXX, sizeof(ui32DataXXX));
+    if ( 0xC7 == ui32DataXXX[0] )
     {
         UARTprintf("\r\n... FXOS8700CQ is alive!!!");
     }
@@ -156,14 +158,14 @@ int main(void)
     }
 
     // ***********************Print register values for testing feedback
-    ui32Data = I2CAGReceive(AG_SLAVE_ADDR, AG_CTRL_REG1);
-    UARTprintf("\r\n0x%02X 0x%02x",AG_CTRL_REG1,ui32Data);
+    I2AGReceive(AG_SLAVE_ADDR, AG_CTRL_REG1, ui32DataXXX, sizeof(ui32DataXXX));
+    UARTprintf("\r\n0x%02X 0x%02x",AG_CTRL_REG1,ui32DataXXX[0]);
 
-    ui32Data = I2CAGReceive(AG_SLAVE_ADDR, AG_XYZ_DATA_CFG);
-    UARTprintf("\r\n0x%02X 0x%02x",AG_XYZ_DATA_CFG,ui32Data);
+    I2AGReceive(AG_SLAVE_ADDR, AG_XYZ_DATA_CFG, ui32DataXXX, sizeof(ui32DataXXX));
+    UARTprintf("\r\n0x%02X 0x%02x",AG_XYZ_DATA_CFG,ui32DataXXX[0]);
 
-    ui32Data = I2CAGReceive(AG_SLAVE_ADDR, AG_M_CTRL_REG1);
-    UARTprintf("\r\n0x%02X 0x%02x",AG_M_CTRL_REG1,ui32Data);
+    I2AGReceive(AG_SLAVE_ADDR, AG_M_CTRL_REG1, ui32DataXXX, sizeof(ui32DataXXX));
+    UARTprintf("\r\n0x%02X 0x%02x",AG_M_CTRL_REG1,ui32DataXXX[0]);
     // ***********************Print register values for testing feedback
 
     // Put the device into standby before changing register values
@@ -177,22 +179,25 @@ int main(void)
     //  running in hybrid mode (accelerometer and magnetometer active)
     AGOutputDataRate(AG_SLAVE_ADDR, ODR_1_56HZ);
 
+    // Choose if both the acclerometer and magnetometer will both be used
+    //  IF BOTH ARE USED THAN OUTPUT DATA RATE IS SHARED.
+    //  E.G. 100 HZ ODR MEANS ACCELEROMETER WILL SAMPLE AT 50 HZ
+    //    AND MAGNETOMETER WILL SAMPLE AT 50 HZ
     AGHybridMode(AG_SLAVE_ADDR, ACCEL_AND_MAG);
 
     // Activate the data device
     AGActive(AG_SLAVE_ADDR);
 
     // ***********************Print register values for testing feedback
-    ui32Data = I2CAGReceive(AG_SLAVE_ADDR, AG_CTRL_REG1);
-    UARTprintf("\r\n0x%02X 0x%02x",AG_CTRL_REG1,ui32Data);
+    I2AGReceive(AG_SLAVE_ADDR, AG_CTRL_REG1, ui32DataXXX, sizeof(ui32DataXXX));
+    UARTprintf("\r\n0x%02X 0x%02x",AG_CTRL_REG1,ui32DataXXX[0]);
 
-    ui32Data = I2CAGReceive(AG_SLAVE_ADDR, AG_XYZ_DATA_CFG);
-    UARTprintf("\r\n0x%02X 0x%02x",AG_XYZ_DATA_CFG,ui32Data);
+    I2AGReceive(AG_SLAVE_ADDR, AG_XYZ_DATA_CFG, ui32DataXXX, sizeof(ui32DataXXX));
+    UARTprintf("\r\n0x%02X 0x%02x",AG_XYZ_DATA_CFG,ui32DataXXX[0]);
 
-    ui32Data = I2CAGReceive(AG_SLAVE_ADDR, AG_M_CTRL_REG1);
-    UARTprintf("\r\n0x%02X 0x%02x",AG_M_CTRL_REG1,ui32Data);
+    I2AGReceive(AG_SLAVE_ADDR, AG_M_CTRL_REG1, ui32DataXXX, sizeof(ui32DataXXX));
+    UARTprintf("\r\n0x%02X 0x%02x",AG_M_CTRL_REG1,ui32DataXXX[0]);
     // ***********************Print register values for testing feedback
-
 
     while(1)
     {
@@ -212,6 +217,8 @@ int main(void)
                 // Writes HIGH to pins
                 GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, GPIO_PIN_4);  // IND1 LED On
             }
+
+            I2AGReceive(AG_SLAVE_ADDR, AG_STATUS, ui8Register, 13);
         }
     }
 }
