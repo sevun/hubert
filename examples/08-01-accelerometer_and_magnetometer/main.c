@@ -43,7 +43,8 @@
 // Define FXOS8700CQ I2C address, determined by PCB layout with pins SA0=1, SA1=0
 #define AG_SLAVE_ADDR       0x1D
 
-uint8_t ui8Register[13];  // FIXME temp variable for verifying receve dump
+tRawData g_tAccelData;
+tRawData g_tMagData;
 
 //*****************************************************************************
 // I2C Functions
@@ -218,7 +219,8 @@ int main(void)
                 GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, GPIO_PIN_4);  // IND1 LED On
             }
 
-            I2AGReceive(AG_SLAVE_ADDR, AG_STATUS, ui8Register, 13);
+            AGGetData(AG_SLAVE_ADDR, ACCEL_DATA, &g_tAccelData );
+            AGGetData(AG_SLAVE_ADDR, MAG_DATA, &g_tMagData );
         }
     }
 }
