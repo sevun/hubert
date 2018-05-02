@@ -1,6 +1,6 @@
 /******************************************************************
  * Hubert Data Logger
- * Accelerometer and Magnetometer Example
+ * Gyroscope Example
  * Developed by Sevun Scientific, Inc.
  * http://sevunscientific.com
  * *****************************************************************
@@ -16,8 +16,6 @@
  *            ___\///////////_______\///////////_____\///////////__
  *
  * *****************************************************************
- * https://github.com/mlwarner/fxos8700cq-arduino/blob/master/FXOS8700CQ.cpp
- * https://eewiki.net/display/microcontroller/I2C+Communication+with+the+TI+Tiva+TM4C123GXL
  */
 
 #include <stdint.h>
@@ -35,22 +33,19 @@
 #include "driverlib/sysctl.h"
 #include "driverlib/timer.h"
 #include "driverlib/uart.h"
-#include "ag/fxos8700cq.h"
+#include "gyro/fxas21002c.h"
 
 // Define UART speed in kbs
 #define UART_SPEED                  115200
 
 // Define FXOS8700CQ I2C address, determined by PCB layout with pins SA0=1, SA1=0
-#define AG_SLAVE_ADDR       0x1D
-
-tRawData g_tAccelData;
-tRawData g_tMagData;
+#define GYRO_SLAVE_ADDR       0x20
 
 //*****************************************************************************
 // I2C Functions
 //*****************************************************************************
 
-// see fxas8700cq.c for accelerometer and magnetometer functions
+// see fxas21002c.c for gyroscope functions
 
 //*****************************************************************************
 // Timer Interrupt
@@ -144,11 +139,11 @@ int main(void)
     // Clear and reset home screen
     UARTprintf("\033[2J\033[;H");
     UARTprintf("Hubert is stirring");
-
+/*
     uint8_t ui32Data[1];
 
     // Get WHO_AM_I register, return should be 0xC7
-    I2AGReceive(AG_SLAVE_ADDR, AG_WHO_AM_I, ui32Data, sizeof(ui32Data));
+    I2AGReceive(GYRO_SLAVE_ADDR, AG_WHO_AM_I, ui32Data, sizeof(ui32Data));
     if ( 0xC7 == ui32Data[0] )
     {
         UARTprintf("\r\n... FXOS8700CQ is alive!!!");
@@ -159,47 +154,47 @@ int main(void)
     }
 
     // ***********************Print register values for testing feedback
-    I2AGReceive(AG_SLAVE_ADDR, AG_CTRL_REG1, ui32Data, sizeof(ui32Data));
+    I2AGReceive(GYRO_SLAVE_ADDR, AG_CTRL_REG1, ui32Data, sizeof(ui32Data));
     UARTprintf("\r\n0x%02X 0x%02x",AG_CTRL_REG1,ui32Data[0]);
 
-    I2AGReceive(AG_SLAVE_ADDR, AG_XYZ_DATA_CFG, ui32Data, sizeof(ui32Data));
+    I2AGReceive(GYRO_SLAVE_ADDR, AG_XYZ_DATA_CFG, ui32Data, sizeof(ui32Data));
     UARTprintf("\r\n0x%02X 0x%02x",AG_XYZ_DATA_CFG,ui32Data[0]);
 
-    I2AGReceive(AG_SLAVE_ADDR, AG_M_CTRL_REG1, ui32Data, sizeof(ui32Data));
+    I2AGReceive(GYRO_SLAVE_ADDR, AG_M_CTRL_REG1, ui32Data, sizeof(ui32Data));
     UARTprintf("\r\n0x%02X 0x%02x",AG_M_CTRL_REG1,ui32Data[0]);
     // ***********************Print register values for testing feedback
 
     // Put the device into standby before changing register values
-    AGStandby(AG_SLAVE_ADDR);
+    AGStandby(GYRO_SLAVE_ADDR);
 
     // Choose the range of the accelerometer (±2G,±4G,±8G)
-    AGAccelRange(AG_SLAVE_ADDR, AFSR_2G);
+    AGAccelRange(GYRO_SLAVE_ADDR, AFSR_2G);
 
     // Choose the output data rate (800 Hz, 400 Hz, 200 Hz, 100 Hz,
     //  50 Hz, 12.5 Hz, 6.25 Hz, 1.56 Hz). Rate is cut in half when
     //  running in hybrid mode (accelerometer and magnetometer active)
-    AGOutputDataRate(AG_SLAVE_ADDR, ODR_1_56HZ);
+    AGOutputDataRate(GYRO_SLAVE_ADDR, ODR_1_56HZ);
 
     // Choose if both the acclerometer and magnetometer will both be used
     //  IF BOTH ARE USED THAN OUTPUT DATA RATE IS SHARED.
     //  E.G. 100 HZ ODR MEANS ACCELEROMETER WILL SAMPLE AT 50 HZ
     //    AND MAGNETOMETER WILL SAMPLE AT 50 HZ
-    AGHybridMode(AG_SLAVE_ADDR, ACCEL_AND_MAG);
+    AGHybridMode(GYRO_SLAVE_ADDR, ACCEL_AND_MAG);
 
     // Activate the data device
-    AGActive(AG_SLAVE_ADDR);
+    AGActive(GYRO_SLAVE_ADDR);
 
     // ***********************Print register values for testing feedback
-    I2AGReceive(AG_SLAVE_ADDR, AG_CTRL_REG1, ui32Data, sizeof(ui32Data));
+    I2AGReceive(GYRO_SLAVE_ADDR, AG_CTRL_REG1, ui32Data, sizeof(ui32Data));
     UARTprintf("\r\n0x%02X 0x%02x",AG_CTRL_REG1,ui32Data[0]);
 
-    I2AGReceive(AG_SLAVE_ADDR, AG_XYZ_DATA_CFG, ui32Data, sizeof(ui32Data));
+    I2AGReceive(GYRO_SLAVE_ADDR, AG_XYZ_DATA_CFG, ui32Data, sizeof(ui32Data));
     UARTprintf("\r\n0x%02X 0x%02x",AG_XYZ_DATA_CFG,ui32Data[0]);
 
-    I2AGReceive(AG_SLAVE_ADDR, AG_M_CTRL_REG1, ui32Data, sizeof(ui32Data));
+    I2AGReceive(GYRO_SLAVE_ADDR, AG_M_CTRL_REG1, ui32Data, sizeof(ui32Data));
     UARTprintf("\r\n0x%02X 0x%02x",AG_M_CTRL_REG1,ui32Data[0]);
     // ***********************Print register values for testing feedback
-
+*/
     while(1)
     {
         // Timer 0
@@ -219,8 +214,8 @@ int main(void)
                 GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, GPIO_PIN_4);  // IND1 LED On
             }
 
-            AGGetData(AG_SLAVE_ADDR, ACCEL_DATA, &g_tAccelData );
-            AGGetData(AG_SLAVE_ADDR, MAG_DATA, &g_tMagData );
+//            AGGetData(GYRO_SLAVE_ADDR, ACCEL_DATA, &g_tAccelData );
+//            AGGetData(GYRO_SLAVE_ADDR, MAG_DATA, &g_tMagData );
         }
     }
 }
