@@ -148,7 +148,7 @@ int main(void)
     uint8_t ui32Data[1];
 
     // Get WHO_AM_I register, return should be 0xC7
-    I2AGReceive(AG_SLAVE_ADDR, AG_WHO_AM_I, ui32Data, sizeof(ui32Data));
+    I2CAGReceive(AG_SLAVE_ADDR, AG_WHO_AM_I, ui32Data, sizeof(ui32Data));
     if ( 0xC7 == ui32Data[0] )
     {
         UARTprintf("\r\n... FXOS8700CQ is alive!!!");
@@ -159,13 +159,13 @@ int main(void)
     }
 
     // ***********************Print register values for testing feedback
-    I2AGReceive(AG_SLAVE_ADDR, AG_CTRL_REG1, ui32Data, sizeof(ui32Data));
+    I2CAGReceive(AG_SLAVE_ADDR, AG_CTRL_REG1, ui32Data, sizeof(ui32Data));
     UARTprintf("\r\n0x%02X 0x%02x",AG_CTRL_REG1,ui32Data[0]);
 
-    I2AGReceive(AG_SLAVE_ADDR, AG_XYZ_DATA_CFG, ui32Data, sizeof(ui32Data));
+    I2CAGReceive(AG_SLAVE_ADDR, AG_XYZ_DATA_CFG, ui32Data, sizeof(ui32Data));
     UARTprintf("\r\n0x%02X 0x%02x",AG_XYZ_DATA_CFG,ui32Data[0]);
 
-    I2AGReceive(AG_SLAVE_ADDR, AG_M_CTRL_REG1, ui32Data, sizeof(ui32Data));
+    I2CAGReceive(AG_SLAVE_ADDR, AG_M_CTRL_REG1, ui32Data, sizeof(ui32Data));
     UARTprintf("\r\n0x%02X 0x%02x",AG_M_CTRL_REG1,ui32Data[0]);
     // ***********************Print register values for testing feedback
 
@@ -190,13 +190,13 @@ int main(void)
     AGActive(AG_SLAVE_ADDR);
 
     // ***********************Print register values for testing feedback
-    I2AGReceive(AG_SLAVE_ADDR, AG_CTRL_REG1, ui32Data, sizeof(ui32Data));
+    I2CAGReceive(AG_SLAVE_ADDR, AG_CTRL_REG1, ui32Data, sizeof(ui32Data));
     UARTprintf("\r\n0x%02X 0x%02x",AG_CTRL_REG1,ui32Data[0]);
 
-    I2AGReceive(AG_SLAVE_ADDR, AG_XYZ_DATA_CFG, ui32Data, sizeof(ui32Data));
+    I2CAGReceive(AG_SLAVE_ADDR, AG_XYZ_DATA_CFG, ui32Data, sizeof(ui32Data));
     UARTprintf("\r\n0x%02X 0x%02x",AG_XYZ_DATA_CFG,ui32Data[0]);
 
-    I2AGReceive(AG_SLAVE_ADDR, AG_M_CTRL_REG1, ui32Data, sizeof(ui32Data));
+    I2CAGReceive(AG_SLAVE_ADDR, AG_M_CTRL_REG1, ui32Data, sizeof(ui32Data));
     UARTprintf("\r\n0x%02X 0x%02x",AG_M_CTRL_REG1,ui32Data[0]);
     // ***********************Print register values for testing feedback
 
