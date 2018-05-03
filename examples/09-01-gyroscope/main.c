@@ -153,6 +153,34 @@ int main(void)
         UARTprintf("\r\n... FXAS21002C is NOT alive.");
     }
 
+    // ***********************Print register values for testing feedback
+    I2CGyroReceive(GYRO_SLAVE_ADDR, GYRO_CTRL_REG1, ui32Data, sizeof(ui32Data));
+    UARTprintf("\r\n0x%02X 0x%02x",GYRO_CTRL_REG1,ui32Data[0]);
+
+    I2CGyroReceive(GYRO_SLAVE_ADDR, GYRO_CTRL_REG0, ui32Data, sizeof(ui32Data));
+    UARTprintf("\r\n0x%02X 0x%02x",GYRO_CTRL_REG0,ui32Data[0]);
+    // ***********************Print register values for testing feedback
+
+    // Put the device into standby before changing register values
+    GyroStandby(GYRO_SLAVE_ADDR);
+
+    // Choose the range of the accelerometer (2000 dps, 1000 dps, 500 dps, 250 dps)
+    GyroRange(GYRO_SLAVE_ADDR, GFSR_250);
+
+    // Optionally, put the device into ready mode (lower power)
+    GyroReady(GYRO_SLAVE_ADDR);
+
+    // Activate the data device
+    GyroActive(GYRO_SLAVE_ADDR);
+
+    // ***********************Print register values for testing feedback
+    I2CGyroReceive(GYRO_SLAVE_ADDR, GYRO_CTRL_REG1, ui32Data, sizeof(ui32Data));
+    UARTprintf("\r\n0x%02X 0x%02x",GYRO_CTRL_REG1,ui32Data[0]);
+
+    I2CGyroReceive(GYRO_SLAVE_ADDR, GYRO_CTRL_REG0, ui32Data, sizeof(ui32Data));
+    UARTprintf("\r\n0x%02X 0x%02x",GYRO_CTRL_REG0,ui32Data[0]);
+    // ***********************Print register values for testing feedback
+
     while(1)
     {
         // Timer 0
