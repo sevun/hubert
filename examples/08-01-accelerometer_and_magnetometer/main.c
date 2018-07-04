@@ -35,6 +35,7 @@
 #include "driverlib/sysctl.h"
 #include "driverlib/timer.h"
 #include "driverlib/uart.h"
+#include "ag/fxos8700cq_tiva.h"
 #include "ag/fxos8700cq.h"
 
 // Define UART speed in kbs
