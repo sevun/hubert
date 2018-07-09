@@ -38,7 +38,7 @@
 // Define UART speed in kbs
 #define UART_SPEED                  115200
 
-// Define FXOS8700CQ I2C address, determined by PCB layout with pins SA0=1, SA1=0
+// Define FXAS21002C I2C address, determined by PCB layout with pins SA0=0
 #define GYRO_SLAVE_ADDR       0x20
 
 //*****************************************************************************
