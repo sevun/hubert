@@ -161,13 +161,13 @@ int main(void)
 
     // ***********************Print register values for testing feedback
     I2CAGReceive(AG_SLAVE_ADDR, AG_CTRL_REG1, ui32Data, sizeof(ui32Data));
-    UARTprintf("\r\n0x%02X 0x%02x",AG_CTRL_REG1,ui32Data[0]);
+    UARTprintf("\r\nAG_CTRL_REG1    = 0x%02x",ui32Data[0]);
 
     I2CAGReceive(AG_SLAVE_ADDR, AG_XYZ_DATA_CFG, ui32Data, sizeof(ui32Data));
-    UARTprintf("\r\n0x%02X 0x%02x",AG_XYZ_DATA_CFG,ui32Data[0]);
+    UARTprintf("\r\nAG_XYZ_DATA_CFG = 0x%02x",ui32Data[0]);
 
     I2CAGReceive(AG_SLAVE_ADDR, AG_M_CTRL_REG1, ui32Data, sizeof(ui32Data));
-    UARTprintf("\r\n0x%02X 0x%02x",AG_M_CTRL_REG1,ui32Data[0]);
+    UARTprintf("\r\nAG_M_CTRL_REG1  = 0x%02x",ui32Data[0]);
     // ***********************Print register values for testing feedback
 
     // Put the device into standby before changing register values
@@ -192,13 +192,13 @@ int main(void)
 
     // ***********************Print register values for testing feedback
     I2CAGReceive(AG_SLAVE_ADDR, AG_CTRL_REG1, ui32Data, sizeof(ui32Data));
-    UARTprintf("\r\n0x%02X 0x%02x",AG_CTRL_REG1,ui32Data[0]);
+    UARTprintf("\r\nAG_CTRL_REG1    = 0x%02x",ui32Data[0]);
 
     I2CAGReceive(AG_SLAVE_ADDR, AG_XYZ_DATA_CFG, ui32Data, sizeof(ui32Data));
-    UARTprintf("\r\n0x%02X 0x%02x",AG_XYZ_DATA_CFG,ui32Data[0]);
+    UARTprintf("\r\nAG_XYZ_DATA_CFG = 0x%02x",ui32Data[0]);
 
     I2CAGReceive(AG_SLAVE_ADDR, AG_M_CTRL_REG1, ui32Data, sizeof(ui32Data));
-    UARTprintf("\r\n0x%02X 0x%02x",AG_M_CTRL_REG1,ui32Data[0]);
+    UARTprintf("\r\nAG_M_CTRL_REG1  = 0x%02x",ui32Data[0]);
     // ***********************Print register values for testing feedback
 
     while(1)
