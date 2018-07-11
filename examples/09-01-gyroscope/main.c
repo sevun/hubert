@@ -42,6 +42,8 @@
 // Define FXAS21002C I2C address, determined by PCB layout with pins SA0=0
 #define GYRO_SLAVE_ADDR       0x20
 
+tRawData g_tGyroData;
+
 //*****************************************************************************
 // I2C Functions
 //*****************************************************************************
@@ -155,11 +157,11 @@ int main(void)
     }
 
     // ***********************Print register values for testing feedback
-    I2CGyroReceive(GYRO_SLAVE_ADDR, GYRO_CTRL_REG1, ui32Data, sizeof(ui32Data));
-    UARTprintf("\r\n0x%02X 0x%02x",GYRO_CTRL_REG1,ui32Data[0]);
-
     I2CGyroReceive(GYRO_SLAVE_ADDR, GYRO_CTRL_REG0, ui32Data, sizeof(ui32Data));
-    UARTprintf("\r\n0x%02X 0x%02x",GYRO_CTRL_REG0,ui32Data[0]);
+    UARTprintf("\r\nGYRO_CTRL_REG0 = 0x%02x",ui32Data[0]);
+
+    I2CGyroReceive(GYRO_SLAVE_ADDR, GYRO_CTRL_REG1, ui32Data, sizeof(ui32Data));
+    UARTprintf("\r\nGYRO_CTRL_REG1 = 0x%02x",ui32Data[0]);
     // ***********************Print register values for testing feedback
 
     // Put the device into standby before changing register values
@@ -168,18 +170,22 @@ int main(void)
     // Choose the range of the accelerometer (2000 dps, 1000 dps, 500 dps, 250 dps)
     GyroRange(GYRO_SLAVE_ADDR, GFSR_250PS);
 
+    // Choose the output data rate (800 Hz, 400 Hz, 200 Hz, 100 Hz,
+    //  50 Hz, 25 Hz, 12.5 Hz)
+    GyroOutputDataRate(GYRO_SLAVE_ADDR, ODR_12_5HZ);
+
     // Optionally, put the device into ready mode (lower power)
-    GyroReady(GYRO_SLAVE_ADDR);
+//    GyroReady(GYRO_SLAVE_ADDR);
 
     // Activate the data device
     GyroActive(GYRO_SLAVE_ADDR);
 
     // ***********************Print register values for testing feedback
-    I2CGyroReceive(GYRO_SLAVE_ADDR, GYRO_CTRL_REG1, ui32Data, sizeof(ui32Data));
-    UARTprintf("\r\n0x%02X 0x%02x",GYRO_CTRL_REG1,ui32Data[0]);
-
     I2CGyroReceive(GYRO_SLAVE_ADDR, GYRO_CTRL_REG0, ui32Data, sizeof(ui32Data));
-    UARTprintf("\r\n0x%02X 0x%02x",GYRO_CTRL_REG0,ui32Data[0]);
+    UARTprintf("\r\nGYRO_CTRL_REG0 = 0x%02x",ui32Data[0]);
+
+    I2CGyroReceive(GYRO_SLAVE_ADDR, GYRO_CTRL_REG1, ui32Data, sizeof(ui32Data));
+    UARTprintf("\r\nGYRO_CTRL_REG1 = 0x%02x",ui32Data[0]);
     // ***********************Print register values for testing feedback
 
     while(1)
@@ -200,6 +206,11 @@ int main(void)
                 // Writes HIGH to pins
                 GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, GPIO_PIN_4);  // IND1 LED On
             }
+
+            GyroGetData(GYRO_SLAVE_ADDR, &g_tGyroData );
+
+            UARTprintf("\r\nGYRO X:%6d Y:%6d Z:%6d",
+                       g_tGyroData.x,g_tGyroData.y,g_tGyroData.z);
         }
     }
 }
