@@ -35,7 +35,7 @@
 #include "driverlib/sysctl.h"
 #include "driverlib/timer.h"
 #include "driverlib/uart.h"
-#include "ag/fxos8700cq_tiva.h"
+#include "ag/fxos8700cq_proc.h"
 #include "ag/fxos8700cq.h"
 
 // Define UART speed in kbs
@@ -222,6 +222,10 @@ int main(void)
 
             AGGetData(AG_SLAVE_ADDR, ACCEL_DATA, &g_tAccelData );
             AGGetData(AG_SLAVE_ADDR, MAG_DATA, &g_tMagData );
+
+            UARTprintf("\r\nACCEL X:%d Y:%d Z:%d  MAG X:%d Y:%d Z:%d",
+                       g_tAccelData.x,g_tAccelData.y,g_tAccelData.z,
+                       g_tMagData.x,g_tMagData.y,g_tMagData.z);
         }
     }
 }
