@@ -11,5 +11,5 @@
 	path = examples/08-01-accelerometer_and_magnetometer/ag
 	url = git@github.com:counterwound/fxos8700cq.git
 [submodule "examples/09-01-gyroscope/gyro"]
-	path = examples/09-01-gyroscope/gyro
+	path = examples/09-01-gyroscope/gy
 	url = git@github.com:counterwound/fxas21002c.git

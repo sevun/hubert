@@ -181,7 +181,7 @@ int main(void)
     //  running in hybrid mode (accelerometer and magnetometer active)
     AGOutputDataRate(AG_SLAVE_ADDR, ODR_1_56HZ);
 
-    // Choose if both the acclerometer and magnetometer will both be used
+    // Choose if both the accelerometer and magnetometer will both be used
     //  IF BOTH ARE USED THAN OUTPUT DATA RATE IS SHARED.
     //  E.G. 100 HZ ODR MEANS ACCELEROMETER WILL SAMPLE AT 50 HZ
     //    AND MAGNETOMETER WILL SAMPLE AT 50 HZ

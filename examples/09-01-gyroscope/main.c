@@ -33,7 +33,8 @@
 #include "driverlib/sysctl.h"
 #include "driverlib/timer.h"
 #include "driverlib/uart.h"
-#include "gyro/fxas21002c.h"
+#include "gy/fxas21002c_proc.h"
+#include "gy/fxas21002c.h"
 
 // Define UART speed in kbs
 #define UART_SPEED                  115200
@@ -165,7 +166,7 @@ int main(void)
     GyroStandby(GYRO_SLAVE_ADDR);
 
     // Choose the range of the accelerometer (2000 dps, 1000 dps, 500 dps, 250 dps)
-    GyroRange(GYRO_SLAVE_ADDR, GFSR_250);
+    GyroRange(GYRO_SLAVE_ADDR, GFSR_250PS);
 
     // Optionally, put the device into ready mode (lower power)
     GyroReady(GYRO_SLAVE_ADDR);
