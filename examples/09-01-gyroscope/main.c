@@ -143,11 +143,11 @@ int main(void)
     UARTprintf("\033[2J\033[;H");
     UARTprintf("Hubert is stirring");
 
-    uint8_t ui32Data[1];
+    uint8_t ui8Data[1];
 
     // Get WHO_AM_I register, return should be 0xC7
-    I2CGyroReceive(GYRO_SLAVE_ADDR, GYRO_WHO_AM_I, ui32Data, sizeof(ui32Data));
-    if ( 0xD7 == ui32Data[0] )
+    I2CGyroReceive(GYRO_SLAVE_ADDR, GYRO_WHO_AM_I, ui8Data, sizeof(ui8Data));
+    if ( 0xD7 == ui8Data[0] )
     {
         UARTprintf("\r\n... FXAS21002C is alive!!!");
     }
@@ -157,11 +157,11 @@ int main(void)
     }
 
     // ***********************Print register values for testing feedback
-    I2CGyroReceive(GYRO_SLAVE_ADDR, GYRO_CTRL_REG0, ui32Data, sizeof(ui32Data));
-    UARTprintf("\r\nGYRO_CTRL_REG0 = 0x%02x",ui32Data[0]);
+    I2CGyroReceive(GYRO_SLAVE_ADDR, GYRO_CTRL_REG0, ui8Data, sizeof(ui8Data));
+    UARTprintf("\r\nGYRO_CTRL_REG0 = 0x%02x",ui8Data[0]);
 
-    I2CGyroReceive(GYRO_SLAVE_ADDR, GYRO_CTRL_REG1, ui32Data, sizeof(ui32Data));
-    UARTprintf("\r\nGYRO_CTRL_REG1 = 0x%02x",ui32Data[0]);
+    I2CGyroReceive(GYRO_SLAVE_ADDR, GYRO_CTRL_REG1, ui8Data, sizeof(ui8Data));
+    UARTprintf("\r\nGYRO_CTRL_REG1 = 0x%02x",ui8Data[0]);
     // ***********************Print register values for testing feedback
 
     // Put the device into standby before changing register values
@@ -174,18 +174,15 @@ int main(void)
     //  50 Hz, 25 Hz, 12.5 Hz)
     GyroOutputDataRate(GYRO_SLAVE_ADDR, ODR_12_5HZ);
 
-    // Optionally, put the device into ready mode (lower power)
-//    GyroReady(GYRO_SLAVE_ADDR);
-
     // Activate the data device
     GyroActive(GYRO_SLAVE_ADDR);
 
     // ***********************Print register values for testing feedback
-    I2CGyroReceive(GYRO_SLAVE_ADDR, GYRO_CTRL_REG0, ui32Data, sizeof(ui32Data));
-    UARTprintf("\r\nGYRO_CTRL_REG0 = 0x%02x",ui32Data[0]);
+    I2CGyroReceive(GYRO_SLAVE_ADDR, GYRO_CTRL_REG0, ui8Data, sizeof(ui8Data));
+    UARTprintf("\r\nGYRO_CTRL_REG0 = 0x%02x",ui8Data[0]);
 
-    I2CGyroReceive(GYRO_SLAVE_ADDR, GYRO_CTRL_REG1, ui32Data, sizeof(ui32Data));
-    UARTprintf("\r\nGYRO_CTRL_REG1 = 0x%02x",ui32Data[0]);
+    I2CGyroReceive(GYRO_SLAVE_ADDR, GYRO_CTRL_REG1, ui8Data, sizeof(ui8Data));
+    UARTprintf("\r\nGYRO_CTRL_REG1 = 0x%02x",ui8Data[0]);
     // ***********************Print register values for testing feedback
 
     while(1)
