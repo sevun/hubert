@@ -1,4 +1,5 @@
-- Fix footpritn for buttons
-- Change R5 to 560 Ohm (from 100 kOhm) for the wake pull down value
+1.0.1
+- Fixed footprint for buttons
+- Changed R5 to 560 Ohm (from 100 kOhm) for the wake pull down value
+- Labeled UART Header J4 with TX, RX, and GND
 - Maybe, look at using sUNREG as the input voltage to VBAT, hibernate will work on USB power
-- UART Heaer, label TX, RX, and GND pins and add 5V pin which can power the board
