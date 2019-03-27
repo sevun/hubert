@@ -3,9 +3,6 @@
 Data acquisition platform for remote data collection
 
 ## Environment
-A video on how to setup the environment.
-
-[![Link](https://img.youtube.com/vi/Lsf7iXAZT8M/1.jpg)](https://www.youtube.com/watch?v=Lsf7iXAZT8M)
 
 ## Examples
 The examples generally follow the tutorial provided by Texas Instruments called
