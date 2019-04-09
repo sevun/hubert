@@ -1,0 +1,19 @@
+Altium Designer Pick and Place Locations
+C:\Users\dixonbr\Git\hubert\hardware\temp\Project Outputs for 7797-20-0225\Pick Place for 7797-20-0225.txt
+
+========================================================================================================================
+File Design Information:
+
+Date:       09/04/19
+Time:       09:39
+Revision:   c90fedad39bde503adae2d3274e34d5dc61c5f50
+Variant:    No variations
+Units used: mil
+
+Designator Comment            Layer       Footprint        Center-X(mil) Center-Y(mil) Rotation Description                                                                                                                                                                        
+U1         TMP102AIDRLT       TopLayer    DRL0006A_L       100.000       165.000       360      "Low Power Digital Temperature Sensor with SMBus and Two-Wire Serial Interface, 1.4 to 3.6 V, -40 to 125 degC, 6-Pin SOT (DRL), Green (RoHS & no Sb/Br), Tape and Reel"            
+R1         CRCW040210K0FKED   TopLayer    0402             90.157        40.000        360      "0.125W, -55-155C, 1005, 50V, ±1%"                                                                                                                                                 
+C1         GRM155R71C103KA01D BottomLayer 0402             100.000       195.000       360      "Cap, 0.01 µF, 16 V, X7R"                                                                                                                                                          
+J1         503480-0600        BottomLayer MOLX-503480-0600 100.000       85.000        180      "0.5 mm Pitch Easy-On(TM) BackFlip(TM) Type FPC Connector, 1.0 mm Mated Height, Right Angle, SMT, Dual Contact, 6 Circuits, -40 to 85 degC, ELV and RoHS Compliant, Tape and Reel" 
+B          CRCW040210K0FKED   TopLayer    0402             210.000       95.000        270      "0.125W, -55-155C, 1005, 50V, ±1%"                                                                                                                                                 
+A          CRCW040210K0FKED   TopLayer    0402             210.000       174.685       90       "0.125W, -55-155C, 1005, 50V, ±1%"                                                                                                                                                 

@@ -1,0 +1,21 @@
+Altium Designer Pick and Place Locations
+C:\Users\dixonbr\Git\hubert\hardware\light_humid\Project Outputs for 7797-20-0226\Pick Place for 7797-20-0226.csv
+
+========================================================================================================================
+File Design Information:
+
+Date:       09/04/19
+Time:       09:47
+Revision:   8eeb9531aa4e4fa32daa29c042502c848ba97e8c
+Variant:    No variations
+Units used: mil
+
+"Designator","Comment","Layer","Footprint","Center-X(mil)","Center-Y(mil)","Rotation","Description"
+"R3","DNP","TopLayer","0402","290.000","310.000","90","0.125W, -55-155C, 1005, 50V, ±1%"
+"J1","503480-0600","BottomLayer","MOLX-503480-0600","95.000","85.000","180","0.5 mm Pitch Easy-On(TM) BackFlip(TM) Type FPC Connector, 1.0 mm Mated Height, Right Angle, SMT, Dual Contact, 6 Circuits, -40 to 85 degC, ELV and RoHS Compliant, Tape and Reel"
+"U2","APDS-9303","TopLayer","APDS-9303","289.999","165.001","90","APDS-9303"
+"U1","SI7006-A20-IM1","TopLayer","SLAB-DFN-6-1500X2400TP_V","70.631","282.087","270","I2C Humidity and Temperature Sensor, 1.9 to 3.6 V, -40 to 125 degC, 6-Pin DFN, RoHS, Tube"
+"R2","CRCW040210K0FKED","BottomLayer","0402","90.000","335.000","180","0.125W, -55-155C, 1005, 50V, ±1%"
+"R1","CRCW040210K0FKED","BottomLayer","0402","310.001","112.122","180","0.125W, -55-155C, 1005, 50V, ±1%"
+"C2","GRM155R71A104KA01D","BottomLayer","0402","310.001","25.000","360","-55-125C, 1005, 10V, X7R, ±10%"
+"C1","GRM155R71A104KA01D","TopLayer","0402","89.999","119.999","180","-55-125C, 1005, 10V, X7R, ±10%"

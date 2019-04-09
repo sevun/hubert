@@ -1,8 +1,8 @@
-DRC Rules Export File for PCB: C:\Users\brandon.dixon\Git\hubert\hardware\main\7797-20-0224.PcbDoc
-RuleKind=MinimumAnnularRing|RuleName=MinimumAnnularRing|Scope=Board|Minimum=5.00
-RuleKind=Width|RuleName=Width Power|Scope=Board|Minimum=6.00
-RuleKind=SolderMaskExpansion|RuleName=SolderMaskExpansion|Scope=Board|Minimum=4.00
-RuleKind=Width|RuleName=Width|Scope=Board|Minimum=8.00
-RuleKind=Clearance|RuleName=Clearance|Scope=Board|Minimum=7.00
-RuleKind=ShortCircuit|RuleName=ShortCircuit|Scope=Board|Allowed=0
+DRC Rules Export File for PCB: C:\Users\dixonbr\Git\hubert\hardware\main\7797-20-0224.PcbDoc
 RuleKind=Clearance|RuleName=Clearance-uC|Scope=Board|Minimum=6.00
+RuleKind=ShortCircuit|RuleName=ShortCircuit|Scope=Board|Allowed=0
+RuleKind=Clearance|RuleName=Clearance|Scope=Board|Minimum=7.00
+RuleKind=Width|RuleName=Width|Scope=Board|Minimum=8.00
+RuleKind=SolderMaskExpansion|RuleName=SolderMaskExpansion|Scope=Board|Minimum=4.00
+RuleKind=Width|RuleName=Width Power|Scope=Board|Minimum=6.00
+RuleKind=MinimumAnnularRing|RuleName=MinimumAnnularRing|Scope=Board|Minimum=5.00

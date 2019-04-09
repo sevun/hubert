@@ -1,20 +1,24 @@
 ------------------------------------------------------------------------------------------
-Gerber File Extension Report For: 7797-20-0225.GBR   2018-01-06  9:45:27 PM
+Gerber File Extension Report For: 7797-20-0225.GBR   4/9/2019  9:39:13 AM
 ------------------------------------------------------------------------------------------
 
 
 ------------------------------------------------------------------------------------------
 Layer Extension     Layer Description                      
 ------------------------------------------------------------------------------------------
-.GTL                Top Layer                               
-.GBL                Bottom Layer                            
-.GPB                Bottom Pad Master                       
-.GPT                Top Pad Master                          
 .GTO                Top Overlay                             
 .GTP                Top Paste                               
 .GTS                Top Solder                              
+.GTL                Top Layer                               
+.GBL                Bottom Layer                            
 .GBS                Bottom Solder                           
+.GBP                Bottom Paste                            
+.GBO                Bottom Overlay                          
 .GM1                Mechanical 1                            
 .GM13               Mechanical 13                           
 .GM15               Mechanical 15                           
+.GM23               Mechanical 23                           
+.GM25               Mechanical 25                           
+.GPT                Top Pad Master                          
+.GPB                Bottom Pad Master                       
 ------------------------------------------------------------------------------------------
