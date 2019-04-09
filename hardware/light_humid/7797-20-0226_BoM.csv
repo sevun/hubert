@@ -1,7 +1,0 @@
-Comment,Description,Designator,Footprint,LibRef,Quantity,Value
-
-"GRM155R71A104KA01D","-55-125C, 1005, 10V, X7R, ±10%","C1, C2","0402","GRM155R71AxxxKdddd","2","0.1u"
-"GRPB032VWVN-RC","2x3 Header, 0.05" spacing","J1","GRPB032VWVN-RC","GRPB032VWVN-RC","1",""
-"CRCW040210K0FKED","0.125W, -55-155C, 1005, 50V, ±1%","R1, R2","0402","CRCW0402xxxxFKED","2","10k"
-"SI7006-A20-IM1","I2C Humidity and Temperature Sensor, 1.9 to 3.6 V, -40 to 125 degC, 6-Pin DFN, RoHS, Tube","U1","SLAB-DFN-6-1500X2400TP_V","CMP-2000-07060-1","1",""
-"APDS-9303","APDS-9303","U2","APDS-9303","APDS-9303","1",""

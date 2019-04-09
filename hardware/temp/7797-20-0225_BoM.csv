@@ -1,6 +1,0 @@
-Comment,Description,Designator,Footprint,LibRef,Quantity,Value
-,,,,,,
-GRM155R71C103KA01D,"Cap, 0.01 µF, 16 V, X7R",C1,402,Cap,1,0.01 µF
-GRPB032VWVN-RC,"2x3 Header, 0.05 spacing""",J1,GRPB032VWVN-RC,GRPB032VWVN-RC,1,
-CRCW040210K0FKED,"0.125W, -55-155C, 1005, 50V, ±1%","R1, R2",402,CRCW0402xxxxFKED,2,10k
-TMP102AIDRLT,"Low Power Digital Temperature Sensor with SMBus and Two-Wire Serial Interface, 1.4 to 3.6 V, -40 to 125 degC, 6-Pin SOT (DRL), Green (RoHS & no Sb/Br), Tape and Reel",U1,DRL0006A_L,CMP-1685-00013-1,1,

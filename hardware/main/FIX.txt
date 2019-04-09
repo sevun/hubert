@@ -1,4 +1,4 @@
-1.0.1
+1.1.0
 - Fixed footprint for buttons
 - Changed R5 to 560 Ohm (from 100 kOhm) for the wake pull down value
 - Labeled UART Header J4 with TX, RX, and GND
