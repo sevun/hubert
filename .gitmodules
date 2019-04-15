@@ -1,15 +1,15 @@
 [submodule "hardware/library"]
 	path = hardware/main/library
-	url = git@github.com:sevun/library-altium.git
+	url = https://github.com/sevun/library-altium.git
 [submodule "hardware/temp/library"]
 	path = hardware/temp/library
-	url = git@github.com:sevun/library-altium.git
+	url = https://github.com/sevun/library-altium.git
 [submodule "hardware/light_humid/library"]
 	path = hardware/light_humid/library
-	url = git@github.com:sevun/library-altium.git
+	url = https://github.com/sevun/library-altium.git
 [submodule "examples/08-01-accelerometer_and_magnetometer/ag"]
 	path = examples/08-01-accelerometer_and_magnetometer/ag
-	url = git@github.com:counterwound/fxos8700cq.git
+	url = https://github.com/counterwound/fxos8700cq.git
 [submodule "examples/09-01-gyroscope/gyro"]
 	path = examples/09-01-gyroscope/gy
-	url = git@github.com:counterwound/fxas21002c.git
+	url = https://github.com/counterwound/fxas21002c.git
