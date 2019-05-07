@@ -3,6 +3,7 @@
 *.zip
 *.raw
 *.log
+*.was
 
 # Altium
 *.AnnotationPreview
