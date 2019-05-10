@@ -1,9 +1,27 @@
-Output: Bill of Materials
-Type  : BOM
+Output: Gerber Files
+Type  : Gerber
 From  : Variant [[No Variations]] of Project [7797-20-0224.PrjPcb]
+   Generated File[7797-20-0224.GTO]
+   Generated File[7797-20-0224.GTP]
+   Generated File[7797-20-0224.GTS]
+   Generated File[7797-20-0224.GTL]
+   Generated File[7797-20-0224.GBL]
+   Generated File[7797-20-0224.GBS]
+   Generated File[7797-20-0224.GM1]
+   Generated File[7797-20-0224.GM6]
+   Generated File[7797-20-0224.GM13]
+   Generated File[7797-20-0224.GM15]
+   Generated File[7797-20-0224.GM20]
+   Generated File[7797-20-0224.GM21]
+   Generated File[7797-20-0224.GKO]
+   Generated File[7797-20-0224.GPT]
+   Generated File[7797-20-0224.GPB]
+   Generated File[7797-20-0224.RUL]
+   Generated File[7797-20-0224.EXTREP]
+   Generated File[7797-20-0224.REP]
 
 
-Files Generated   : 0
+Files Generated   : 18
 Documents Printed : 0
 
-Finished Output Generation At 9:35:56 AM On 4/9/2019
+Finished Output Generation At 8:21:18 PM On 5/9/2019
