@@ -4,9 +4,9 @@ C:\Users\brandon.dixon\Git\hubert\hardware\main\Project Outputs for 7797-20-0224
 ========================================================================================================================
 File Design Information:
 
-Date:       09/05/19
-Time:       20:11
-Revision:   7c490435ee932e2b9ea1364b1e230f386d9526a5
+Date:       10/05/19
+Time:       21:48
+Revision:   b0c84aee3b6373c4f834b48c7dff6faf1c28e895
 Variant:    No variations
 Units used: mil
 
@@ -22,7 +22,7 @@ Units used: mil
 "R6","CRCW040210K0FKED","TopLayer","0402","182.874","2650.000","180","0.125W, -55-155C, 1005, 50V, ±1%"
 "R5","CRCW040210K0FKED","TopLayer","0402","182.559","2690.000","180","0.125W, -55-155C, 1005, 50V, ±1%"
 "U6","APDS-9303","TopLayer","APDS-9303","1023.192","2560.748","180","APDS-9303"
-"U4","SI7006-A20-IM1","TopLayer","SLAB-DFN-6-1500X2400TP_V","597.285","2580.630","180","I2C Humidity and Temperature Sensor, 1.9 to 3.6 V, -40 to 125 degC, 6-Pin DFN, RoHS, Tube"
+"U4","SI7006-A20-IM1","TopLayer","SLAB-DFN-6-1500X2400TP_V","592.913","2580.630","180","I2C Humidity and Temperature Sensor, 1.9 to 3.6 V, -40 to 125 degC, 6-Pin DFN, RoHS, Tube"
 "R17","DNP","TopLayer","0402","847.483","2563.268","180","0.125W, -55-155C, 1005, 50V, ±1%"
 "R18","CRCW040210K0FKED","TopLayer","0402","847.483","2611.496","180","0.125W, -55-155C, 1005, 50V, ±1%"
 "R28","CRCW040210K0FKED","TopLayer","0402","1148.743","2580.748","270","0.125W, -55-155C, 1005, 50V, ±1%"
@@ -123,5 +123,5 @@ Units used: mil
 "C19","GRM1555C1H330FA01D","TopLayer","0402","625.000","1160.001","360","Capacitor (Semiconductor SIM Model)"
 "C39","GRM155R71A104KA01D","TopLayer","0402","1490.000","1890.001","180","-55-125C, 1005, 10V, X7R, ±10%"
 "R13","CRCW0402560RFKEDHP","TopLayer","0402","655.000","1090.001","0","0.125W, -55-155C, 1005, 50V, ±1%"
-"1","LTST-C171TBKT","TopLayer","0805","545.001","1095.001","180","LED"
+"IND3","LTST-C171TBKT","TopLayer","0805","545.001","1095.001","180","LED"
 "SW2","PCM12SMTR","TopLayer","CKCP-PCM12SMTR_V","1574.547","605.945","90","Ultraminiature Slide Switch, SPDT, 0.3 A, 6 V, -20 to 85 degC, 3-Pin SMD, RoHS, Tape and Reel"
