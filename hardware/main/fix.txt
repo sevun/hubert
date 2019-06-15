@@ -1,6 +1,10 @@
 Design Notes
 - Put Gyro in center of board
 
+Fix
+- Footprint for switch is missing pad
+- Footprint for light sensor is missing pin 1 marking
+
 1.1.0
 - Fixed footprint for buttons
 - Changed R5 to 560 Ohm (from 100 kOhm) for the wake pull down value
