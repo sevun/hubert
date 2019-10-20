@@ -20,10 +20,20 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "inc/hw_ints.h"
 #include "inc/hw_memmap.h"
 #include "driverlib/gpio.h"
+#include "driverlib/interrupt.h"
 #include "driverlib/sysctl.h"
+#include "driverlib/systick.h"
 #include "pinout.h"
+
+uint32_t ui32Time;
+
+void SysTick_IntHandler(void)
+{
+    ui32Time++;
+}
 
 int main(void)
 {
@@ -33,8 +43,18 @@ int main(void)
     // Initialize and setup the ports
     PinoutSet();
 
-    GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, GPIO_PIN_4);
-    GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_5, GPIO_PIN_5);
+    uint32_t clock=SysCtlClockGet();
+    SysTickIntRegister(SysTick_IntHandler);
 
-    return 0;
+    SysTickPeriodSet(SysCtlClockGet());
+    IntMasterEnable();
+    SysTickIntEnable();
+
+    //loop forever
+    while(1)
+    {
+        SysTickEnable();
+        SysCtlDelay(SysCtlClockGet()/3); //approx 1 sec
+        SysTickDisable();
+    }
 }
