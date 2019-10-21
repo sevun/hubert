@@ -30,10 +30,19 @@
 
 uint32_t ui32Time;
 
-void SysTick_IntHandler(void)
+//*****************************************************************************
+// Systick Interrupt
+//*****************************************************************************
+void SysTickHandler(void)
 {
+    SysTickIntDisable();
     ui32Time++;
+    SysTickIntEnable();
 }
+
+//*****************************************************************************
+// Main Code
+//*****************************************************************************
 
 int main(void)
 {
@@ -43,18 +52,24 @@ int main(void)
     // Initialize and setup the ports
     PinoutSet();
 
-    uint32_t clock=SysCtlClockGet();
-    SysTickIntRegister(SysTick_IntHandler);
+    //*****************************************************************************
+    // Systick Setup
+    //*****************************************************************************
 
-    SysTickPeriodSet(SysCtlClockGet());
-    IntMasterEnable();
+    // Configure the systick timer for a 100 Hz interrupt
+    SysTickPeriodSet(SysCtlClockGet()/100);
+    SysTickIntRegister(SysTickHandler);
+    SysTickEnable();
     SysTickIntEnable();
+
+    //*****************************************************************************
+    // Configure Interrupts
+    //*****************************************************************************
+
+    IntMasterEnable();
 
     //loop forever
     while(1)
     {
-        SysTickEnable();
-        SysCtlDelay(SysCtlClockGet()/3); //approx 1 sec
-        SysTickDisable();
     }
 }
