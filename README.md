@@ -4,6 +4,10 @@ Data acquisition platform for remote data collection
 
 ## Environment
 
+'[Install Video](https://youtu.be/Uy4bwljGHBk)'
+'[Environment Setup Video 1 of 2](https://youtu.be/8hmD-uCTuE4)'
+'[Environment Setup Video 2 of 2](https://youtu.be/zjBcTDxnw5o)'
+
 ## Examples
 The examples generally follow the tutorial provided by Texas Instruments called
 '[Getting Started with the TIVA™ C Series TM4C123G LaunchPad](http://processors.wiki.ti.com/index.php/Getting_Started_with_the_TIVA™_C_Series_TM4C123G_LaunchPad)'.
