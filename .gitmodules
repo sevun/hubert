@@ -8,8 +8,8 @@
 	path = hardware/light_humid/library
 	url = ../library-altium.git
 [submodule "examples/08-01-accelerometer_and_magnetometer/ag"]
-	path = examples/08-01-accelerometer_and_magnetometer/ag
+	path = examples/09-01-accelerometer_and_magnetometer/ag
 	url = ../fxos8700cq.git
 [submodule "examples/09-01-gyroscope/gyro"]
-	path = examples/09-01-gyroscope/gy
+	path = examples/09-02-gyroscope/gy
 	url = ../fxas21002c.git
