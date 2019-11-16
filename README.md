@@ -4,8 +4,10 @@ Data acquisition platform for remote data collection
 
 ## Environment
 
-'[Install Video](https://youtu.be/Uy4bwljGHBk)'
-'[Environment Setup Video 1 of 2](https://youtu.be/8hmD-uCTuE4)'
+'[Install Video](https://youtu.be/pE7hokXIcNs)'
+
+'[Environment Setup Video 1 of 2](https://youtu.be/tAgkPmhZi5Y)'
+
 '[Environment Setup Video 2 of 2](https://youtu.be/zjBcTDxnw5o)'
 
 ## Examples
