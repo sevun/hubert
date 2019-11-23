@@ -1,6 +1,6 @@
 
 # Hubert
-Data acquisition platform for remote data collection
+Data acquisition platform with sensors for remote data collection
 
 ## Environment
 
