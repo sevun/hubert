@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>hubert</name>
+	<name>09-03-temperature</name>
 	<comment></comment>
 	<projects>
 	</projects>
 	<buildSpec>
 		<buildCommand>
 			<name>org.eclipse.cdt.managedbuilder.core.genmakebuilder</name>
-			<triggers>clean,full,incremental,</triggers>
 			<arguments>
 			</arguments>
 		</buildCommand>
@@ -29,13 +28,17 @@
 		<link>
 			<name>driverlib.lib</name>
 			<type>1</type>
-			<locationURI>TIVAWARE_INSTALL/driverlib/ccs/Debug/driverlib.lib</locationURI>
+			<locationURI>PARENT-4-PROJECT_LOC/ti/TivaWare_C_Series-2.1.4.178/driverlib/ccs/Debug/driverlib.lib</locationURI>
+		</link>
+		<link>
+			<name>uartstdio.c</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/ti/TivaWare_C_Series-2.1.4.178/utils/uartstdio.c</locationURI>
+		</link>
+		<link>
+			<name>uartstdio.h</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/ti/TivaWare_C_Series-2.1.4.178/utils/uartstdio.h</locationURI>
 		</link>
 	</linkedResources>
-	<variableList>
-		<variable>
-			<name>TIVAWARE_INSTALL</name>
-			<value>file:/C:/ti/TivaWare_C_Series-2.1.4.178</value>
-		</variable>
-	</variableList>
 </projectDescription>
